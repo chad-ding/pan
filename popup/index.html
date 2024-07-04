@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="../css/index.css">
+	<link rel="stylesheet" href="../lib/bootstrap-5.3.3/index.min.css">
+	<link rel="stylesheet" href="../lib/jquery.toast/index.min.css">
+	<script src="../lib/bootstrap-5.3.3/index.min.js" charset="UTF-8"></script>
+	<script src="../lib/jquery-3.7.1/index.min.js" charset="UTF-8"></script>
+	<script src="../lib/jquery.qrcode/index.min.js" charset="UTF-8"></script>
+	<script src="../lib/jquery.toast/index.min.js" charset="UTF-8"></script>
+	<script src="../script/index.js"></script>
+	<script src="../script/codec.js"></script>
+	<script src="../script/qrcode.js"></script>
+</head>
+
+<body>
+	<div class="root">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a id="tab-qrcode" class="nav-link" aria-current="page" href="#">二维码</a>
+			</li>
+			<li class="nav-item">
+				<a id="tab-codec" class="nav-link" aria-current="page" href="#">URL编/解码</a>
+			</li>
+		</ul>
+		<div id="qrcode" class="content">
+			<div id="monitor"></div>
+			<textarea id="string"></textarea>
+		</div>
+		<div id="codec" class="content">
+			<textarea id="url"></textarea>
+			<p class="info"></p>
+			<div class="btn-group">
+				<button class="btn btn-primary">encodeURIComponent</button>
+				<button class="btn btn-success">decodeURIComponent</button>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
