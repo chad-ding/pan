@@ -56,12 +56,14 @@ $(() => {
     })
 
     const handleRgbChange = (value, type) => {
+        const input = type === 'r' ? redInput : type === 'g' ? greenInput : blueInput
+
         if (isNaN(value) || value < 0 || value > 255) {
-            readInput.addClass('is-invalid')
+            input.addClass('is-invalid')
 
             delete _rgba_[type]
         } else {
-            readInput.removeClass('is-invalid')
+            input.removeClass('is-invalid')
             _rgba_[type] = value
 
             if (Object.keys(_rgba_).length === 4) {
