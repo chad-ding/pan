@@ -1,26 +1,28 @@
 $(() => {
-    const tabs = ['codec', 'qrcode']
+    const tabs = $('li[data-tab-key]')
 
-    tabs.forEach((item) => {
-        $(`#tab-${item}`).bind('click', () => {
-            setActive(item)
+    tabs.each((index, ele) => {
+        ele.addEventListener('click', () => {
+            const key = ele.dataset.tabKey
+            setActive(key)
         })
     })
 
-    const setActive = (tabName) => {
-        tabs.forEach((item) => {
-            const tab = $(`#tab-${item}`)
-            const content = $(`#${item}`)
-
-            if (tabName === item) {
-                tab.addClass('active')
+    const setActive = (tabKey) => {
+        tabs.each((index, ele) => {
+            const key = ele.dataset.tabKey
+            const content = $(`#${key}`)
+            if (tabKey === key) {
+                ele.classList.remove('active')
                 content.show()
             } else {
-                tab.removeClass('active')
+                ele.classList.remove('active')
                 content.hide()
             }
         })
     }
 
-    setActive('qrcode')
+    const key = tabs[0].dataset.tabKey
+
+    setActive(key)
 })
