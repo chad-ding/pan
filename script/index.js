@@ -13,10 +13,10 @@ $(() => {
             const key = ele.dataset.tabKey
             const content = $(`#${key}`)
             if (tabKey === key) {
-                ele.classList.remove('active')
+                ele.firstElementChild.classList.add('active')
                 content.show()
             } else {
-                ele.classList.remove('active')
+                ele.firstElementChild.classList.remove('active')
                 content.hide()
             }
         })
