@@ -133,7 +133,7 @@ $(() => {
             return 1
         } else {
             hexWarning.hide()
-            return alpha[0]
+            return Number(alpha[0])
         }
     }
 
@@ -162,7 +162,7 @@ $(() => {
     }
 
     const setColor = (color) => {
-        $('.sample').css('background-color', color)
+        $('.color-pallet').css('background-color', color)
     }
 
     setColor('#000000')
@@ -175,7 +175,7 @@ $(() => {
             rgba.push(parseInt(hex.slice(i, i + 2), 16))
         }
 
-        _rgba_.a = rgba[0]
+        _rgba_.r = rgba[0]
         redInput.val(rgba[0])
 
         _rgba_.g = rgba[1]
@@ -187,7 +187,7 @@ $(() => {
         _rgba_.a = hexToAlpha(rgba[3].toString(16))
         alphaInput.val(_rgba_.a)
 
-        setColor(hex)
+        setColor('#' + hex)
     }
 
     const rgba2Hex = () => {
