@@ -128,7 +128,13 @@ $(() => {
             }
         })
 
-        return (alpha && alpha[0]) || 1
+        if (!alpha) {
+            hexWarning.show()
+            return 1
+        } else {
+            hexWarning.hide()
+            return alpha[0]
+        }
     }
 
     const hexInput = $('#color input#hex')
@@ -136,6 +142,9 @@ $(() => {
     const greenInput = $('#color input#green')
     const blueInput = $('#color input#blue')
     const alphaInput = $('#color input#alpha')
+    const hexWarning = $('#hexWarning')
+
+    hexWarning.hide()
 
     // 设置默认值
     hexInput.val('#000000')
@@ -151,6 +160,12 @@ $(() => {
         b: 0,
         a: 1
     }
+
+    const setColor = (color) => {
+        $('.sample').css('background-color', color)
+    }
+
+    setColor('#000000')
 
     const hex2Rgba = (hex) => {
         const rgba = []
@@ -171,6 +186,8 @@ $(() => {
 
         _rgba_.a = hexToAlpha(rgba[3].toString(16))
         alphaInput.val(_rgba_.a)
+
+        setColor(hex)
     }
 
     const rgba2Hex = () => {
@@ -187,6 +204,8 @@ $(() => {
         }
 
         hexInput.val(hex)
+
+        setColor(hex)
     }
 
     // 输入的16进制颜色必须为6位或8位
@@ -203,6 +222,8 @@ $(() => {
     })
 
     const handleRgbChange = (value, type) => {
+        hexWarning.hide()
+
         const input = type === 'r' ? redInput : type === 'g' ? greenInput : blueInput
 
         if (isNaN(value) || value < 0 || value > 255) {
@@ -239,6 +260,8 @@ $(() => {
 
     alphaInput.on('change', (evt) => {
         const value = evt.target.value
+
+        hexWarning.hide()
 
         // 最多2位小数
         if (isNaN(value) || value < 0 || value > 1 || value.length > 4) {

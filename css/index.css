@@ -40,6 +40,12 @@ textarea {
 	margin: 0 auto 24px;
 }
 
+.warning {
+	color: #dc3545;
+	font-size: 14px;
+	margin-top: 4px;
+}
+
 .info {
 	width: 450px;
 	white-space: pre-wrap;
@@ -47,6 +53,13 @@ textarea {
 	font-weight: bold;
 	text-align: left;
 	margin-top: 12px;
+}
+
+.sample {
+	width: 60px !important;
+	height: 60px;
+	border-radius: 50%;
+	background-color: transparent;
 }
 
 .btn-group {
