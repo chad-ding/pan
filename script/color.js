@@ -170,9 +170,7 @@ $(() => {
         blueInput.val(rgba[2])
 
         _rgba_.a = hexToAlpha(rgba[3].toString(16))
-        const alpha = hexToAlpha(_rgba_.a)
-
-        alphaInput.val(alpha)
+        alphaInput.val(_rgba_.a)
     }
 
     const rgba2Hex = () => {
