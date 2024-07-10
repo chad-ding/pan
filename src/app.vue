@@ -4,7 +4,7 @@
             <el-tab-pane name="qrcode" label="二维码">
                 <qr-code />
             </el-tab-pane>
-            <el-tab-pane name="codec" label="URL编解码">
+            <el-tab-pane name="codec" label="URI编解码">
                 <codec />
             </el-tab-pane>
             <el-tab-pane name="color" label="色值转化">
