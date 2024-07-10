@@ -45,7 +45,7 @@ export default {
                     width: 300,
                     height: 300,
                     color: {
-                        dark: '#01847F'
+                        dark: '#606266'
                     }
                 },
                 function (error) {

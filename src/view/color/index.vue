@@ -3,19 +3,26 @@
         <div class="color">
             <p class="title">
                 <span class="text">HEX</span>
-                <a class="btn" href="javascript:;" @click="() => onCopy('hex')">复制</a>
+                <a class="btn" href="javascript:;" @click="() => onCopy('hex')">
+                    <el-icon><CopyDocument /></el-icon>&nbsp;复制
+                </a>
             </p>
             <el-row>
-                <el-col :span="24">
+                <el-col :span="12">
                     <el-form-item prop="hex">
                         <el-input @change="onHexChange" v-model="formOptions.hex" />
                     </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <div class="circle" :style="{ backgroundColor: circleColor }"></div>
                 </el-col>
             </el-row>
             <div class="rgba">
                 <p class="title">
                     <span class="text">RGBA</span>
-                    <a class="btn" href="javascript:;" @click="() => onCopy('rgba')">复制</a>
+                    <a class="btn" href="javascript:;" @click="() => onCopy('rgba')">
+                        <el-icon><CopyDocument /></el-icon> &nbsp;复制
+                    </a>
                 </p>
                 <el-row :gutter="20">
                     <el-col :span="6">
@@ -67,9 +74,6 @@
                         </el-row>
                     </el-col>
                 </el-row>
-            </div>
-            <div class="plate">
-                <div class="circle" :style="{ backgroundColor: circleColor }"></div>
             </div>
         </div>
     </el-form>
@@ -438,6 +442,9 @@ export default {
             margin-left: 12px;
             text-decoration: none;
             color: rgb(121, 187, 255);
+            display: inline-flex;
+            flex-direction: row;
+            align-items: center;
         }
     }
 
@@ -465,17 +472,13 @@ export default {
         margin-top: 24px;
     }
 
-    .plate {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        width: 100%;
-    }
-
     .circle {
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
         border-radius: 50%;
+        position: absolute;
+        right: 60px;
+        top: -30px;
     }
 }
 </style>
