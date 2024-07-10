@@ -1,6 +1,7 @@
 <template>
     <div class="codec">
         <el-input v-model="content" :rows="10" type="textarea" placeholder="请输入内容" resize="none" />
+        <p class="result">{{ result }}</p>
         <div class="group-wrap">
             <el-button-group>
                 <el-button @click="onEncode" type="primary">encodeURIComponent</el-button>
@@ -17,6 +18,7 @@ import util from '@/common/util'
 export default {
     data() {
         return {
+            result: '',
             content: ''
         }
     },
@@ -26,8 +28,8 @@ export default {
                 return
             }
 
-            const res = encodeURIComponent(this.content)
-            util.copy(res)
+            this.result = encodeURIComponent(this.content)
+            util.copy(this.result)
 
             ElMessage({
                 message: '复制成功',
@@ -39,8 +41,8 @@ export default {
                 return
             }
 
-            const res = decodeURIComponent(this.content)
-            util.copy(res)
+            this.result = decodeURIComponent(this.content)
+            util.copy(this.result)
 
             ElMessage({
                 message: '复制成功',
@@ -57,6 +59,15 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    .result {
+        word-wrap: break-word;
+        word-break: break-all;
+        margin-top: 12px;
+        font-size: 14px;
+        color: rgb(96, 98, 102);
+        width: 100%;
+    }
 
     .group-wrap {
         margin-top: 12px;
