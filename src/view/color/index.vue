@@ -193,7 +193,7 @@ export default {
             {
                 validator(rule, value, callback) {
                     if (isNaN(value) || value < 0 || value > 255 || value % 1 !== 0) {
-                        callback(new Error('输入的值无效'))
+                        callback(new Error('输入0-255的整数'))
                     } else {
                         callback()
                     }
@@ -240,8 +240,10 @@ export default {
                         { required: true, trigger: 'blur', message: '' },
                         {
                             validator(rule, value, callback) {
-                                if (isNaN(value) || value < 0 || value > 1 || value.length > 4) {
-                                    callback(new Error('输入的值无效'))
+                                if (isNaN(value) || value < 0 || value > 1) {
+                                    callback(new Error('输入0-1的数字'))
+                                } else if (value.length > 4) {
+                                    callback(new Error('最多2位小数'))
                                 } else {
                                     callback()
                                 }
@@ -355,8 +357,9 @@ export default {
         },
         // rgba转小数
         rgba2Hex() {
-            let hex = '#'
+            this.$refs.form.clearValidate('hex')
 
+            let hex = '#'
             const { r, g, b, a } = this.formOptions.rgba
             const rgb = [r, g, b]
 
@@ -374,6 +377,10 @@ export default {
         },
         // 16进制转rgba
         hex2Rgba() {
+            Object.keys(this.formOptions.rgba).forEach((key) => {
+                this.$refs.form.clearValidate('rgba.' + key)
+            })
+
             const rgba = []
             const hex = this.formOptions.hex.replace('#', '').toUpperCase().padEnd(8, 'F')
 
