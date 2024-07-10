@@ -1,6 +1,6 @@
 {
     "name": "pan",
-    "description": "自定义工具集",
+    "description": "H5开发工具集",
     "version": "1.0",
     "manifest_version": 3,
     "permissions": ["tabs"],

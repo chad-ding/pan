@@ -269,7 +269,7 @@ export default {
                     return
                 }
 
-                util.copy(hex)
+                util.copy(hex.toUpperCase())
 
                 ElMessage({
                     message: '复制成功',
@@ -364,7 +364,7 @@ export default {
                 hex += this.decToHex(a)
             }
 
-            this.formOptions.hex = hex
+            this.formOptions.hex = hex.toUpperCase()
 
             this.circleColor = this.formOptions.hex
         },

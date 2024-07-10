@@ -3,10 +3,10 @@ import ElementPlus from 'element-plus'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
-import App from './app.vue'
-
 import 'element-plus/dist/index.css'
 import './style.less'
+
+import App from './app.vue'
 
 const app = createApp(App)
 
