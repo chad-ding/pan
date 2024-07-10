@@ -20,7 +20,6 @@ export default defineConfig(({ mode }) => {
         },
         build: {
             outDir: 'popup',
-            sourcemap: mode === 'dev',
             rollupOptions: {
                 output: {
                     assetFileNames: (assetInfo) => {
