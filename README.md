@@ -1,6 +1,6 @@
 # pan
 
-一个协助提升 H5 开发效能的 chrome 小插件
+一个协助提升 H5 开发效能的 chrome 小插件，因为没有google开发账号去进行发布，可以clone下代码`npm run build`生成插件执行代码然后打开chrome开发者模式安装使用
 
 ## 已经支持的功能
 
