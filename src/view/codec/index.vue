@@ -1,6 +1,6 @@
 <template>
     <div class="codec">
-        <el-input v-model="content" :rows="10" type="textarea" placeholder="请输入内容" resize="none" />
+        <el-input v-model="content" :rows="5" type="textarea" placeholder="请输入内容" resize="none" />
         <p class="result">{{ result }}</p>
         <div class="group-wrap">
             <el-button-group>
@@ -24,11 +24,15 @@ export default {
     },
     methods: {
         onEncode() {
-            if (!this.content) {
+            if (!this.content.trim()) {
+                ElMessage({
+                    message: '请输入内容',
+                    type: 'error'
+                })
                 return
             }
 
-            this.result = encodeURIComponent(this.content)
+            this.result = encodeURIComponent(this.content.trim())
             util.copy(this.result)
 
             ElMessage({
@@ -37,11 +41,15 @@ export default {
             })
         },
         onDecode() {
-            if (!this.content) {
+            if (!this.content.trim()) {
+                ElMessage({
+                    message: '请输入内容',
+                    type: 'error'
+                })
                 return
             }
 
-            this.result = decodeURIComponent(this.content)
+            this.result = decodeURIComponent(this.content.trim())
             util.copy(this.result)
 
             ElMessage({

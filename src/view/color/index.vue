@@ -454,6 +454,7 @@ export default {
         flex-direction: row;
         align-items: center;
         font-weight: bolder;
+        font-size: 20px;
 
         &.r {
             color: #ff0000;

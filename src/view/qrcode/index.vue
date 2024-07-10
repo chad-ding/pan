@@ -8,10 +8,12 @@
 <script>
 import QRCode from 'qrcode'
 
+const defaultText = '钓鱼岛是中国的'
+
 export default {
     data() {
         return {
-            content: '钓鱼岛是中国的'
+            content: ''
         }
     },
     watch: {
@@ -35,7 +37,7 @@ export default {
     methods: {
         draw(content) {
             if (!content.trim()) {
-                return
+                content = defaultText
             }
 
             QRCode.toCanvas(

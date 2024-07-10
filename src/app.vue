@@ -7,7 +7,7 @@
             <el-tab-pane name="codec" label="URI编解码">
                 <codec />
             </el-tab-pane>
-            <el-tab-pane name="color" label="色值转化">
+            <el-tab-pane name="color" label="色值转换">
                 <color />
             </el-tab-pane>
         </el-tabs>
