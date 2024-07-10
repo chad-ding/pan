@@ -192,7 +192,7 @@ export default {
             { required: true, trigger: 'blur', message: '不能为空' },
             {
                 validator(rule, value, callback) {
-                    if (isNaN(value) || value < 0 || value > 255) {
+                    if (isNaN(value) || value < 0 || value > 255 || value % 1 !== 0) {
                         callback(new Error('输入的值无效'))
                     } else {
                         callback()
