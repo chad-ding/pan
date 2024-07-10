@@ -208,11 +208,24 @@ $(() => {
         setColor(hex)
     }
 
+    // 检验16进制颜色输入是否正确
+    const validateHex = (hex) => {
+        return !(!/^#[0-9|a-f]{6,8}$/i.test(hex) || (hex.length !== 7 && hex.length !== 9))
+    }
+
+    const validateRgb = (rgb) => {
+        return !isNaN(rgb) && rgb >= 0 && rgb <= 255
+    }
+
+    const validateAlpha = (a) => {
+        return !isNaN(a) && a >= 0 && a <= 1 && a.length <= 4
+    }
+
     // 输入的16进制颜色必须为6位或8位
     hexInput.on('change', (evt) => {
         const value = evt.target.value
 
-        if (!/^#[0-9|a-f]{6,8}$/i.test(value) || (value.length !== 7 && value.length !== 9)) {
+        if (!validateHex(value)) {
             hexInput.addClass('is-invalid')
         } else {
             hexInput.removeClass('is-invalid')
@@ -226,7 +239,7 @@ $(() => {
 
         const input = type === 'r' ? redInput : type === 'g' ? greenInput : blueInput
 
-        if (isNaN(value) || value < 0 || value > 255) {
+        if (!validateRgb(value)) {
             input.addClass('is-invalid')
 
             delete _rgba_[type]
@@ -264,7 +277,7 @@ $(() => {
         hexWarning.hide()
 
         // 最多2位小数
-        if (isNaN(value) || value < 0 || value > 1 || value.length > 4) {
+        if (!validateAlpha(value)) {
             alphaInput.addClass('is-invalid')
 
             delete _rgba_.a
@@ -275,6 +288,83 @@ $(() => {
             if (Object.keys(_rgba_).length === 4) {
                 rgba2Hex()
             }
+        }
+    })
+
+    const toast = (text) =>
+        $.toast({
+            text: text,
+            showHideTransition: 'slide', // It can be plain, fade or slide
+            bgColor: 'blue', // Background color for toast
+            textColor: '#eee', // text color
+            allowToastClose: false, // Show the close button or not
+            hideAfter: 1200, // `false` to make it sticky or time in miliseconds to hide after
+            stack: 5, // `fakse` to show one stack at a time count showing the number of toasts that can be shown at once
+            textAlign: 'left', // Alignment of text i.e. left, right, center
+            position: 'top-center' // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values to position the toast on page
+        })
+
+    const copy = (text) => {
+        const textArea = document.createElement('textarea')
+        textArea.innerText = text
+        textArea.style.width = '0'
+        textArea.style.height = '0'
+        document.body.appendChild(textArea)
+
+        textArea.select()
+        document.execCommand('copy')
+        document.body.removeChild(textArea)
+
+        toast('复制成功')
+    }
+
+    $('#copy-hex').on('click', () => {
+        const val = hexInput.val()
+        if (!validateHex(val)) {
+            hexInput.addClass('is-invalid')
+            toast('色值无效')
+            return
+        }
+
+        copy(val)
+    })
+
+    $('#copy-rgba').on('click', () => {
+        const r = redInput.val()
+        const g = greenInput.val()
+        const b = blueInput.val()
+        const a = alphaInput.val()
+
+        let invalid = false
+        if (!validateRgb(a)) {
+            invalid = true
+            redInput.addClass('is-invald')
+        }
+
+        if (!validateRgb(g)) {
+            invalid = true
+            greenInput.addClass('is-invald')
+        }
+
+        if (!validateRgb(b)) {
+            invalid = true
+            blueInput.addClass('is-invald')
+        }
+
+        if (!validateAlpha(a)) {
+            invalid = true
+            alphaInput.addClass('is-invalid')
+        }
+
+        if (invalid) {
+            toast('色值无效')
+            return
+        }
+
+        if (Number(a) === 1) {
+            copy(`rgb(${r},${g},${b})`)
+        } else {
+            copy(`rgb(${r},${g},${b},${a})`)
         }
     })
 })

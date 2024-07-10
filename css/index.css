@@ -2,6 +2,13 @@ html,body,div,p {
 	margin: 0;
 }
 
+a[id^="copy-"] {
+	text-decoration: none;
+	color: var(--bs-primary);
+	font-size: 14px;
+	margin-left: 12px;
+}
+
 .root {
 	width: 480px;
 	min-height: 210px;
