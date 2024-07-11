@@ -67,7 +67,7 @@
                         <el-row>
                             <el-form-item prop="rgba.a">
                                 <el-col :span="6">
-                                    <p class="label">A</p>
+                                    <p class="label" :style="{ opacity: formOptions.rgba.a }">A</p>
                                 </el-col>
                                 <el-col :span="18">
                                     <el-input @change="onAlphaChange" v-model="formOptions.rgba.a" />
