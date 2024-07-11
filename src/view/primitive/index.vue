@@ -1,6 +1,6 @@
 <template>
     <el-radio-group v-model="type">
-        <el-radio value="num">数字</el-radio>
+        <el-radio value="num">整数</el-radio>
         <el-radio value="str">字符串</el-radio>
         <el-radio value="datetime">日期</el-radio>
     </el-radio-group>

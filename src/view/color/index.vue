@@ -10,7 +10,9 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item prop="hex">
-                        <el-input @change="onHexChange" v-model="formOptions.hex" />
+                        <el-input @change="onHexChange" v-model="formOptions.hex">
+                            <template v-slot:prepend>#</template>
+                        </el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -205,7 +207,7 @@ export default {
         return {
             circleColor: '#000000',
             formOptions: {
-                hex: '#000000',
+                hex: '000000',
                 rgba: {
                     r: 0,
                     g: 0,
@@ -218,11 +220,11 @@ export default {
                     { required: true, trigger: 'blur', message: '请输入值' },
                     {
                         validator(rule, value, callback) {
-                            if (!/^#[0-9|a-f]{6,8}$/i.test(value) || (value.length !== 7 && value.length !== 9)) {
+                            if (!/^[0-9|a-f]{6,8}$/i.test(value) || (value.length !== 6 && value.length !== 8)) {
                                 callback(new Error('输入的值无效'))
                             } else if (
-                                value.length === 9 &&
-                                !Object.values(alphaHexMap).includes(value.substring(7).toUpperCase())
+                                value.length === 8 &&
+                                !Object.values(alphaHexMap).includes(value.substring(6).toUpperCase())
                             ) {
                                 callback(new Error('透明度无效'))
                             } else {
@@ -275,7 +277,7 @@ export default {
                     return
                 }
 
-                util.copy(hex.toUpperCase())
+                util.copy('#' + hex.toUpperCase())
 
                 ElMessage({
                     message: '复制成功',
@@ -359,7 +361,7 @@ export default {
         rgba2Hex() {
             this.$refs.form.clearValidate('hex')
 
-            let hex = '#'
+            let hex = ''
             const { r, g, b, a } = this.formOptions.rgba
             const rgb = [r, g, b]
 
@@ -373,7 +375,7 @@ export default {
 
             this.formOptions.hex = hex.toUpperCase()
 
-            this.circleColor = this.formOptions.hex
+            this.circleColor = '#' + this.formOptions.hex
         },
         // 16进制转rgba
         hex2Rgba() {
@@ -382,7 +384,7 @@ export default {
             })
 
             const rgba = []
-            const hex = this.formOptions.hex.replace('#', '').toUpperCase().padEnd(8, 'F')
+            const hex = this.formOptions.hex.toUpperCase().padEnd(8, 'F')
 
             for (let i = 0; i < hex.length; i += 2) {
                 rgba.push(parseInt(hex.slice(i, i + 2), 16))
@@ -395,7 +397,7 @@ export default {
                 a: this.hexToDec(rgba[3].toString(16))
             }
 
-            this.circleColor = this.formOptions.hex
+            this.circleColor = '#' + this.formOptions.hex
         },
         // 透明度小数转16进制
         decToHex(alpha) {
@@ -422,11 +424,7 @@ export default {
                 }
             })
 
-            if (!alpha) {
-                return 1
-            } else {
-                return Number(alpha[0])
-            }
+            return !alpha ? 1 : Number(alpha[0])
         }
     }
 }

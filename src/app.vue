@@ -37,7 +37,7 @@ export default {
     },
     data() {
         return {
-            currenTab: 'primitive'
+            currenTab: 'qrcode'
         }
     }
 }

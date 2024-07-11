@@ -1,7 +1,15 @@
 <template>
     <div class="qrcode">
         <canvas ref="canvas" />
-        <el-input v-model="content" :rows="5" type="textarea" placeholder="请输入内容" resize="none" />
+        <el-input
+            v-model="content"
+            :rows="5"
+            type="textarea"
+            placeholder="请输入内容"
+            resize="none"
+            maxlength="200"
+            :show-word-limit="true"
+        />
     </div>
 </template>
 
