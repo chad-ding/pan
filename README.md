@@ -1,6 +1,6 @@
 # pan
 
-一个协助提升 H5 开发效能的 chrome 小插件，因为没有google开发账号去进行发布，可以clone下代码`npm run build`生成插件执行代码然后打开chrome开发者模式安装使用
+一个协助提升 H5 开发效能的 chrome 小插件，可以 clone 下代码`npm run build`生成插件执行代码然后打开 chrome 开发者模式安装使用，`npm run pub`生成会生成一个 pan.zip 的压缩包方便分享
 
 ## 已经支持的功能
 
