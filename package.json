@@ -1,11 +1,12 @@
 {
     "name": "pan",
     "private": true,
-    "version": "1.1.0",
-    "type": "module",
+    "version": "1.0.1",
     "scripts": {
         "dev": "vite --mode=development --open",
-        "build": "vite build"
+        "pub": "npm run build && npm run zip",
+        "build": "vite build",
+        "zip": "node zip.js"
     },
     "dependencies": {
         "@element-plus/icons-vue": "^2.1.0",
@@ -29,6 +30,7 @@
         "@commitlint/config-conventional": "^11.0.0",
         "@vitejs/plugin-vue": "^4.0.0",
         "@vue/eslint-config-standard": "^8.0.1",
+        "adm-zip": "^0.5.14",
         "date-format": "^4.0.14",
         "eslint": "^7.32.0",
         "eslint-config-prettier": "^6.15.0",
