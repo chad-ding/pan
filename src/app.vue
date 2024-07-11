@@ -10,6 +10,9 @@
             <el-tab-pane name="color" label="色值转换">
                 <color />
             </el-tab-pane>
+            <el-tab-pane name="json" label="JSON格式化">
+                <json />
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>
@@ -18,16 +21,18 @@
 import QrCode from '@/view/qrcode/index.vue'
 import Codec from '@/view/codec/index.vue'
 import Color from '@/view/color/index.vue'
+import Json from '@/view/json/index.vue'
 
 export default {
     components: {
         QrCode,
         Codec,
-        Color
+        Color,
+        Json
     },
     data() {
         return {
-            currenTab: 'qrcode'
+            currenTab: 'json'
         }
     }
 }

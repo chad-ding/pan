@@ -1,7 +1,7 @@
 {
     "name": "pan",
     "private": true,
-    "version": "1.0.0",
+    "version": "1.1.0",
     "type": "module",
     "scripts": {
         "dev": "vite --mode=development --open",
@@ -10,12 +10,20 @@
     "dependencies": {
         "@element-plus/icons-vue": "^2.1.0",
         "element-plus": "^2.2.29",
+        "jsoneditor": "^10.1.0",
         "qrcode": "^1.5.3",
         "vue": "^3.2.45"
     },
     "author": "CHAD.DING",
     "license": "MIT",
-    "keywords": ["h5", "chrome plugin", "pan"],
+    "keywords": [
+        "h5",
+        "chrome plugin",
+        "qrcode",
+        "uri encode decode",
+        "color transform",
+        "json format"
+    ],
     "devDependencies": {
         "@commitlint/cli": "^11.0.0",
         "@commitlint/config-conventional": "^11.0.0",
