@@ -4,14 +4,14 @@
             <el-tab-pane name="qrcode" label="二维码">
                 <qr-code />
             </el-tab-pane>
-            <el-tab-pane name="codec" label="URI编解码">
-                <codec />
-            </el-tab-pane>
             <el-tab-pane name="color" label="色值转换">
                 <color />
             </el-tab-pane>
             <el-tab-pane name="json" label="JSON格式化">
                 <json />
+            </el-tab-pane>
+            <el-tab-pane name="codec" label="URI编解码">
+                <codec />
             </el-tab-pane>
         </el-tabs>
     </div>
