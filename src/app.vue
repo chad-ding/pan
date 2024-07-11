@@ -13,6 +13,9 @@
             <el-tab-pane name="codec" label="URI编解码">
                 <codec />
             </el-tab-pane>
+            <el-tab-pane name="primitive" label="原始类型转化">
+                <primitive />
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>
@@ -22,17 +25,19 @@ import QrCode from '@/view/qrcode/index.vue'
 import Codec from '@/view/codec/index.vue'
 import Color from '@/view/color/index.vue'
 import Json from '@/view/json/index.vue'
+import Primitive from '@/view/primitive/index.vue'
 
 export default {
     components: {
         QrCode,
         Codec,
         Color,
-        Json
+        Json,
+        Primitive
     },
     data() {
         return {
-            currenTab: 'qrcode'
+            currenTab: 'primitive'
         }
     }
 }
