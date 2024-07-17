@@ -62,6 +62,7 @@ export default {
 <style lang="less" scoped>
 .str {
     widows: 100%;
+    margin-bottom: 18px;
 
     .content {
         max-width: 100%;
