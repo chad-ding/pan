@@ -1,6 +1,14 @@
 <template>
     <div class="codec">
-        <el-input v-model="content" :rows="5" type="textarea" placeholder="请输入内容" resize="none" />
+        <el-input
+            v-model="content"
+            :rows="5"
+            type="textarea"
+            placeholder="请输入内容"
+            resize="none"
+            maxlength="200"
+            :show-word-limit="true"
+        />
         <p class="result">{{ result }}</p>
         <div class="group-wrap">
             <el-button-group>

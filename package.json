@@ -1,7 +1,7 @@
 {
     "name": "pan",
     "private": true,
-    "version": "1.0.1",
+    "version": "1.1.0",
     "scripts": {
         "dev": "vite --mode=development --open",
         "pub": "npm run build && npm run zip",
@@ -11,6 +11,7 @@
     "dependencies": {
         "@element-plus/icons-vue": "^2.1.0",
         "element-plus": "^2.2.29",
+        "jsoneditor": "^10.1.0",
         "qrcode": "^1.5.3",
         "vue": "^3.2.45"
     },
@@ -19,7 +20,10 @@
     "keywords": [
         "h5",
         "chrome plugin",
-        "pan"
+        "qrcode",
+        "uri encode decode",
+        "color transform",
+        "json format"
     ],
     "devDependencies": {
         "@commitlint/cli": "^11.0.0",
