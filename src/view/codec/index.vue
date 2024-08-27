@@ -6,7 +6,6 @@
             type="textarea"
             placeholder="请输入内容"
             resize="none"
-            maxlength="200"
             :show-word-limit="true"
         />
         <p class="result">{{ result }}</p>
@@ -71,22 +70,22 @@ export default {
 
 <style lang="less" scoped>
 .codec {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 
-    .result {
-        word-wrap: break-word;
-        word-break: break-all;
-        margin-top: 12px;
-        font-size: 14px;
-        color: rgb(96, 98, 102);
-        width: 100%;
-    }
+	.result {
+		word-wrap: break-word;
+		word-break: break-all;
+		margin-top: 12px;
+		font-size: 14px;
+		color: rgb(96, 98, 102);
+		width: 100%;
+	}
 
-    .group-wrap {
-        margin-top: 12px;
-    }
+	.group-wrap {
+		margin-top: 12px;
+	}
 }
 </style>
