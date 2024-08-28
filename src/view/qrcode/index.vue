@@ -7,7 +7,6 @@
             type="textarea"
             placeholder="请输入内容"
             resize="none"
-            maxlength="200"
             :show-word-limit="true"
         />
     </div>
@@ -71,14 +70,14 @@ export default {
 
 <style lang="less" scoped>
 .qrcode {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 
-    canvas {
-        width: 300px;
-        height: 300px;
-    }
+	canvas {
+		width: 300px;
+		height: 300px;
+	}
 }
 </style>
