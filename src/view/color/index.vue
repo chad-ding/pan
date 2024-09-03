@@ -310,7 +310,7 @@ export default {
             if (Number(a) === 1) {
                 util.copy(`rgb(${r},${g},${b})`)
             } else {
-                util.copy(`rgb(${r},${g},${b},${a})`)
+                util.copy(`rgba(${r},${g},${b},${a})`)
             }
 
             ElMessage({
@@ -432,59 +432,59 @@ export default {
 
 <style lang="less" scoped>
 .color {
-    width: 100%;
+	width: 100%;
 
-    .title {
-        margin-bottom: 12px;
+	.title {
+		margin-bottom: 12px;
 
-        .text {
-            font-size: 18px;
-            font-weight: bold;
-        }
+		.text {
+			font-size: 18px;
+			font-weight: bold;
+		}
 
-        .btn {
-            font-size: 14px;
-            margin-left: 12px;
-            text-decoration: none;
-            color: rgb(121, 187, 255);
-            display: inline-flex;
-            flex-direction: row;
-            align-items: center;
-        }
-    }
+		.btn {
+			font-size: 14px;
+			margin-left: 12px;
+			text-decoration: none;
+			color: rgb(121, 187, 255);
+			display: inline-flex;
+			flex-direction: row;
+			align-items: center;
+		}
+	}
 
-    .label {
-        height: 100%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        font-weight: bolder;
-        font-size: 20px;
+	.label {
+		height: 100%;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		font-weight: bolder;
+		font-size: 20px;
 
-        &.r {
-            color: #ff0000;
-        }
+		&.r {
+			color: #ff0000;
+		}
 
-        &.g {
-            color: #00ff00;
-        }
+		&.g {
+			color: #00ff00;
+		}
 
-        &.b {
-            color: #0000ff;
-        }
-    }
+		&.b {
+			color: #0000ff;
+		}
+	}
 
-    .rgba {
-        margin-top: 24px;
-    }
+	.rgba {
+		margin-top: 24px;
+	}
 
-    .circle {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        position: absolute;
-        right: 60px;
-        top: -30px;
-    }
+	.circle {
+		width: 100px;
+		height: 100px;
+		border-radius: 50%;
+		position: absolute;
+		right: 60px;
+		top: -30px;
+	}
 }
 </style>
