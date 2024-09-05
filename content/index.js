@@ -1,5 +1,7 @@
 import brand from './brand'
 
-;(() => {
-    console.log(brand)
-})()
+const boot = () => {
+	console.log(brand)
+}
+
+boot()
