@@ -1,7 +1,5 @@
-const brand = `▗▄▄▖  ▗▄▖ ▗▖  ▗▖
-▐▌ ▐▌▐▌ ▐▌▐▛▚▖▐▌
-▐▛▀▘ ▐▛▀▜▌▐▌ ▝▜▌
-▐▌   ▐▌ ▐▌▐▌  ▐▌`
+import brand from './brand'
 
-// 打印标识
-console.log(brand)
+;(() => {
+    console.log(brand)
+})()

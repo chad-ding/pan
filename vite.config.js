@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
             disableHostCheck: true
         },
         build: {
-            outDir: 'popup',
+            outDir: 'dist/popup',
             rollupOptions: {
                 output: {
                     assetFileNames: (assetInfo) => {
@@ -32,16 +32,16 @@ export default defineConfig(({ mode }) => {
                         } else if (/\.(woff2?|eot|ttf|otf)(\?.*)?$/i.test(assetInfo.name)) {
                             extType = 'fonts'
                         }
-                        return `static/${extType}/[name]-[hash][extname]`
+                        return `static/${extType}/[hash][extname]`
                     },
-                    chunkFileNames: 'static/js/[name]-[hash].js',
-                    entryFileNames: 'static/js/[name]-[hash].js'
+                    chunkFileNames: 'static/js/[hash].js',
+                    entryFileNames: 'static/js/[hash].js'
                 }
             }
         },
         resolve: {
             alias: {
-                '@': path.resolve(__dirname, './src')
+                '@': path.resolve(__dirname, './popup')
             }
         },
         plugins: [
