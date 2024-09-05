@@ -1,30 +1,14 @@
 <template>
-	<div class="str">
-		<el-row :gutter="20">
-			<el-col :span="4">
-				<label class="el-form-item__label">字符串</label>
-			</el-col>
-			<el-col :span="20">
-				<el-input
-					v-model="origin"
-					type="textarea"
-					:rows="5"
-					resize="none"
-					@change="onChange"
-				/>
-			</el-col>
-		</el-row>
-		<el-row :gutter="20">
-			<el-col :span="4">
-				<label class="el-form-item__label">unicode</label>
-			</el-col>
-			<el-col :span="20">
-				<el-card>
-					<p class="content">{{ encoded }}</p>
-				</el-card>
-			</el-col>
-		</el-row>
-	</div>
+	<el-form label-width="75">
+		<el-form-item label="字符串">
+			<el-input v-model="origin" type="textarea" :rows="5" resize="none" @change="onChange" />
+		</el-form-item>
+		<el-form-item label="unicode">
+			<el-card class="card">
+				<p class="content">{{ encoded }}</p>
+			</el-card>
+		</el-form-item>
+	</el-form>
 </template>
 
 <script>
@@ -66,20 +50,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.str {
-	margin-bottom: 18px;
-	widows: 100%;
+.card {
+	width: 100%;
 
 	.content {
 		max-height: 180px;
-		max-width: 100%;
 		overflow-y: scroll;
 		white-space: normal;
+		width: 100%;
 		word-wrap: break-word;
-	}
-
-	.el-row + .el-row {
-		margin-top: 12px;
 	}
 }
 </style>

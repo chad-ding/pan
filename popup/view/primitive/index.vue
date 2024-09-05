@@ -6,7 +6,6 @@
 	<div class="content">
 		<num v-if="type === 'num'" />
 		<str v-else-if="type === 'str'" />
-		<datetime v-if="type === 'datetime'" />
 	</div>
 </template>
 
