@@ -1,29 +1,58 @@
 <template>
-	<el-form label-width="75">
-		<el-form-item label="字符串">
-			<el-input v-model="origin" type="textarea" :rows="5" resize="none" @change="onChange" />
+	<el-form label-width="90">
+		<el-form-item label="原始字符串">
+			<el-input v-model="origin" type="textarea" :rows="5" resize="none" />
 		</el-form-item>
-		<el-form-item label="unicode">
-			<el-card class="card">
-				<p class="content">{{ encoded }}</p>
+		<el-form-item>
+			<el-button-group>
+				<el-button type="primary" @click="string2unicode">Unicode编码</el-button>
+				<el-button type="success" @click="unicode2string">Unicode解码</el-button>
+				<el-button type="primary" @click="string2hex">Hex编码</el-button>
+				<el-button type="success" @click="hex2string">Hex解码 </el-button>
+			</el-button-group>
+		</el-form-item>
+		<el-form-item label="编/解码结果">
+			<el-card class="card" @click="copy">
+				<p class="content">{{ result }}</p>
 			</el-card>
 		</el-form-item>
 	</el-form>
 </template>
 
 <script>
+import utf8 from 'utf8'
+import { ElMessage } from 'element-plus'
+
+import util from '@/common/util'
+
 export default {
 	data() {
 		return {
 			origin: '',
-			encoded: ''
+			result: ''
 		}
 	},
 	methods: {
-		onChange() {
-			this.string2unicode(this.origin)
+		string2hex() {
+			const encoded = utf8.encode(this.origin)
+			let result = ''
+			for (let i = 0; i < encoded.length; i++) {
+				result += encoded[i].charCodeAt(0).toString(16).padStart(2, '0')
+			}
+
+			this.result = result
 		},
-		string2unicode(str) {
+		hex2string() {
+			let encoded = ''
+			const str = this.origin
+			for (let i = 0; i < str.length; i += 2) {
+				encoded += String.fromCharCode(parseInt(str.slice(i, i + 2), 16))
+			}
+
+			this.result = utf8.decode(encoded)
+		},
+		string2unicode() {
+			const str = this.origin
 			let ret = ''
 			let ustr = ''
 
@@ -43,7 +72,31 @@ export default {
 				ret += ustr
 			}
 
-			this.encoded = ret
+			this.result = ret
+		},
+		unicode2string() {
+			try {
+				const json = JSON.parse('{"text": "' + this.origin + '"}')
+				this.result = json.text
+			} catch (e) {
+				console.error('解码错误: ', e)
+
+				ElMessage({
+					message: 'Unicode解码错误',
+					type: 'success'
+				})
+			}
+		},
+		copy() {
+			if (!this.result.trim()) {
+				return
+			}
+			util.copy(this.result)
+
+			ElMessage({
+				message: '复制成功',
+				type: 'success'
+			})
 		}
 	}
 }
@@ -54,6 +107,7 @@ export default {
 	width: 100%;
 
 	.content {
+		cursor: pointer;
 		max-height: 180px;
 		overflow-y: scroll;
 		white-space: normal;

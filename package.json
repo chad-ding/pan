@@ -14,6 +14,7 @@
 		"element-plus": "^2.2.29",
 		"jsoneditor": "^10.1.0",
 		"qrcode": "^1.5.3",
+		"utf8": "^3.0.0",
 		"vue": "^3.2.45"
 	},
 	"author": "CHAD.DING",
@@ -27,7 +28,6 @@
 		"json format"
 	],
 	"devDependencies": {
-		"rollup": "^4.21.2",
 		"@commitlint/cli": "^11.0.0",
 		"@commitlint/config-conventional": "^11.0.0",
 		"@vitejs/plugin-vue": "^4.0.0",
@@ -51,6 +51,7 @@
 		"less": "^4.1.3",
 		"lint-staged": "^10.5.4",
 		"prettier": "^2.8.8",
+		"rollup": "^4.21.2",
 		"stylelint": "^13.13.1",
 		"stylelint-config-css-modules": "^2.3.0",
 		"stylelint-config-prettier": "^8.0.2",
