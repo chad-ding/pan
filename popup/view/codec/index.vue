@@ -1,5 +1,5 @@
 <template>
-	<el-form label-width="92">
+	<el-form label-width="94">
 		<el-form-item label="编/解码方式:">
 			<el-radio-group v-model="type">
 				<el-radio value="uri">URIComponent</el-radio>
@@ -91,13 +91,24 @@ export default {
 			this.result = result
 		},
 		hex2string(text) {
+			if (!/^[0-9a-f]+$/i.test(text)) {
+				ElMessage({
+					message: '输入的值不能被解码',
+					type: 'error'
+				})
+				return
+			}
+
 			try {
-				let encoded = ''
+				let decoded = ''
 				for (let i = 0; i < text.length; i += 2) {
-					encoded += String.fromCharCode(parseInt(text.slice(i, i + 2), 16))
+					decoded += String.fromCharCode(parseInt(text.slice(i, i + 2), 16))
 				}
 
-				this.result = utf8.decode(encoded)
+				this.result = utf8.decode(decoded).trim()
+				if (!this.result) {
+					throw new Error('解码错误')
+				}
 			} catch (e) {
 				console.error('Hex解码错误: ', e)
 				ElMessage({
@@ -131,7 +142,11 @@ export default {
 		unicode2string(text) {
 			try {
 				const json = JSON.parse('{"text": "' + text + '"}')
-				this.result = json.text
+				this.result = json.text.trim()
+
+				if (!this.result) {
+					throw new Error('解码错误')
+				}
 			} catch (e) {
 				console.error('解码错误: ', e)
 
