@@ -166,6 +166,8 @@ export default {
 
 	.result {
 		cursor: pointer;
+		font-size: 14px;
+		line-height: 20px;
 		max-height: 180px;
 		overflow-y: scroll;
 		white-space: normal;
