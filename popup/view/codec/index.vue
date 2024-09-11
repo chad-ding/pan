@@ -1,8 +1,8 @@
 <template>
-	<el-form label-width="90">
-		<el-form-item label="编解码方式:">
+	<el-form label-width="92">
+		<el-form-item label="编/解码方式:">
 			<el-radio-group v-model="type">
-				<el-radio value="uri">URI</el-radio>
+				<el-radio value="uri">URIComponent</el-radio>
 				<el-radio value="unicode">Unicode</el-radio>
 				<el-radio value="hex">Hex</el-radio>
 			</el-radio-group>
