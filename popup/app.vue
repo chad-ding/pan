@@ -10,11 +10,11 @@
 			<el-tab-pane name="json" label="JSON格式化">
 				<json />
 			</el-tab-pane>
-			<el-tab-pane name="codec" label="URI编解码">
+			<el-tab-pane name="codec" label="字符串编/解码">
 				<codec />
 			</el-tab-pane>
-			<el-tab-pane name="primitive" label="原始类型转化">
-				<primitive />
+			<el-tab-pane name="numeric" label="数字转化">
+				<numeric />
 			</el-tab-pane>
 		</el-tabs>
 	</div>
@@ -25,7 +25,7 @@ import QrCode from '@/view/qrcode/index.vue'
 import Codec from '@/view/codec/index.vue'
 import Color from '@/view/color/index.vue'
 import Json from '@/view/json/index.vue'
-import Primitive from '@/view/primitive/index.vue'
+import Numeric from '@/view/numeric/index.vue'
 
 export default {
 	components: {
@@ -33,7 +33,7 @@ export default {
 		Codec,
 		Color,
 		Json,
-		Primitive
+		Numeric
 	},
 	data() {
 		return {
