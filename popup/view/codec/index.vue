@@ -5,6 +5,7 @@
 				<el-radio value="uri">URIComponent</el-radio>
 				<el-radio value="unicode">Unicode</el-radio>
 				<el-radio value="hex">Hex</el-radio>
+				<el-radio value="base64">Base64</el-radio>
 			</el-radio-group>
 		</el-form-item>
 		<el-form-item label="字符串:">
@@ -33,6 +34,7 @@
 
 <script>
 import utf8 from 'utf8'
+import { Base64 } from 'js-base64'
 import { ElMessage } from 'element-plus'
 import util from '@/common/util'
 
@@ -55,9 +57,11 @@ export default {
 			if (type === 'uri') {
 				this.encodeURI(origin)
 			} else if (type === 'unicode') {
-				this.string2unicode(origin)
+				this.stringToUnicode(origin)
+			} else if (type === 'base64') {
+				this.stringToBase64(origin)
 			} else {
-				this.string2hex(origin)
+				this.stringToHex(origin)
 			}
 		},
 		onDecode() {
@@ -70,10 +74,18 @@ export default {
 			if (type === 'uri') {
 				this.decodeURI(origin)
 			} else if (type === 'unicode') {
-				this.unicode2string(origin)
+				this.unicodeToString(origin)
+			} else if (type === 'base64') {
+				this.base64ToString(origin)
 			} else {
-				this.hex2string(origin)
+				this.hexToString(origin)
 			}
+		},
+		stringToBase64(text) {
+			this.result = Base64.encode(text)
+		},
+		base64ToString(text) {
+			this.result = Base64.decode(text)
 		},
 		encodeURI(text) {
 			this.result = encodeURIComponent(text)
@@ -81,7 +93,7 @@ export default {
 		decodeURI(text) {
 			this.result = decodeURIComponent(text)
 		},
-		string2hex(text) {
+		stringToHex(text) {
 			const encoded = utf8.encode(text)
 			let result = ''
 			for (let i = 0; i < encoded.length; i++) {
@@ -90,7 +102,7 @@ export default {
 
 			this.result = result
 		},
-		hex2string(text) {
+		hexToString(text) {
 			if (!/^[0-9a-f]+$/i.test(text)) {
 				ElMessage({
 					message: '输入的值不能被解码',
@@ -117,7 +129,7 @@ export default {
 				})
 			}
 		},
-		string2unicode(text) {
+		stringToUnicode(text) {
 			let ret = ''
 			let ustr = ''
 
@@ -139,7 +151,7 @@ export default {
 
 			this.result = ret
 		},
-		unicode2string(text) {
+		unicodeToString(text) {
 			try {
 				const json = JSON.parse('{"text": "' + text + '"}')
 				this.result = json.text.trim()
