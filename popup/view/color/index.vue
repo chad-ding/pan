@@ -36,7 +36,8 @@
 								<el-col :span="18">
 									<el-input
 										v-model="formOptions.rgba.r"
-										@change="() => onRgbChange('r')"
+										@paste="onRgbaPaste"
+										@input="() => onRgbChange('r')"
 									/>
 								</el-col>
 							</el-form-item>
@@ -51,7 +52,8 @@
 								<el-col :span="18">
 									<el-input
 										v-model="formOptions.rgba.g"
-										@change="() => onRgbChange('g')"
+										@paste="onRgbaPaste"
+										@input="() => onRgbChange('g')"
 									/>
 								</el-col>
 							</el-form-item>
@@ -66,7 +68,8 @@
 								<el-col :span="18">
 									<el-input
 										v-model="formOptions.rgba.b"
-										@change="() => onRgbChange('b')"
+										@paste="onRgbaPaste"
+										@input="() => onRgbChange('b')"
 									/>
 								</el-col>
 							</el-form-item>
@@ -81,7 +84,8 @@
 								<el-col :span="18">
 									<el-input
 										v-model="formOptions.rgba.a"
-										@change="onAlphaChange"
+										@paste="onRgbaPaste"
+										@input="onAlphaChange"
 									/>
 								</el-col>
 							</el-form-item>
@@ -276,6 +280,60 @@ export default {
 		}
 	},
 	methods: {
+		onRgbaPaste(evt) {
+			evt.preventDefault()
+
+			let text = ''
+			if (evt.clipboardData || evt.originalEvent.clipboardData) {
+				text = (evt.clipboardData || evt.originalEvent.clipboardData).getData('text/plain')
+			}
+			text = text.trim().replace(/\s+/g, '').toLowerCase()
+
+			const regExp = /^rgba?\((\d+),(\d+),(\d+)(,[^)]+)?\)$/
+			const res = regExp.exec(text)
+			if (!res) {
+				ElMessage({
+					message: '颜色值无效，请检查复制的内容',
+					type: 'error'
+				})
+				return
+			}
+
+			let [, r, g, b, a] = res
+			if (a) {
+				a = a.substring(1)
+			} else {
+				a = 1
+			}
+
+			// 色值无效
+			if (
+				r < 0 ||
+				r > 255 ||
+				g < 0 ||
+				g > 255 ||
+				b < 0 ||
+				b > 255 ||
+				isNaN(a) ||
+				a < 0 ||
+				a > 1
+			) {
+				ElMessage({
+					message: '颜色值无效，请检查复制的内容',
+					type: 'error'
+				})
+				return
+			}
+
+			const rgba = {
+				r,
+				g,
+				b,
+				a
+			}
+			this.formOptions.rgba = rgba
+			this.rgba2Hex()
+		},
 		async onCopy(type) {
 			const { hex, rgba } = this.formOptions
 
@@ -326,9 +384,9 @@ export default {
 			const { r, g, b, a } = rgba
 
 			if (Number(a) === 1) {
-				util.copy(`rgb(${r},${g},${b})`)
+				util.copy(`rgb(${Number(r)},${Number(g)},${Number(b)})`)
 			} else {
-				util.copy(`rgba(${r},${g},${b},${a})`)
+				util.copy(`rgba(${Number(r)},${Number(g)},${Number(b)},${Number(a)})`)
 			}
 
 			ElMessage({
@@ -360,6 +418,7 @@ export default {
 				return
 			}
 
+			this.formOptions.rgba[hue] = Number(this.formOptions.rgba[hue])
 			this.rgba2Hex()
 		},
 		async onAlphaChange() {
@@ -373,6 +432,7 @@ export default {
 				return
 			}
 
+			this.formOptions.rgba.a = Number(this.formOptions.rgba.a)
 			this.rgba2Hex()
 		},
 		// rgba转小数
