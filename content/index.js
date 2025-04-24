@@ -1,1 +1,7 @@
-console.log('内容脚本')
+import brand from './brand'
+
+const boot = () => {
+	console.log(brand)
+}
+
+boot()

@@ -11,11 +11,11 @@ import App from './app.vue'
 const app = createApp(App)
 
 app.use(ElementPlus, {
-    locale: zhCn
+	locale: zhCn
 })
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-    app.component(key, component)
+	app.component(key, component)
 }
 
 app.mount('#root')
