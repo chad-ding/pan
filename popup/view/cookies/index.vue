@@ -3,7 +3,7 @@
 		<ul class="menus">
 			<li class="menu-item">
 				<el-tooltip effect="dark" content="增加Cookie" placement="bottom">
-					<el-icon><CirclePlus /></el-icon>
+					<el-icon @click="onAdd"><CirclePlus /></el-icon>
 				</el-tooltip>
 			</li>
 			<li class="menu-item">
@@ -65,18 +65,28 @@
 				</template>
 			</el-table-column>
 		</el-table>
+		<el-drawer v-model="showForm" title="编辑Cookie" size="90%">
+			<cookie-form :current-domain="currentHost" @close="() => (showForm = false)" />
+		</el-drawer>
 	</div>
 </template>
 
 <script>
+import { ElMessage, ElMessageBox } from 'element-plus'
 import util from '@/common/util'
 
+import CookieForm from './component/cookie-form.vue'
+
 export default {
+	components: {
+		CookieForm
+	},
 	data() {
 		return {
 			cookies: [],
 			currentHost: '',
-			hosts: []
+			hosts: [],
+			showForm: false
 		}
 	},
 	computed: {
@@ -121,8 +131,6 @@ export default {
 
 			const hosts = this.getHostTree(this.currentHost)
 
-			console.log('>>>>>>>> ', hosts)
-
 			const allCookies = await new Promise(resolve => {
 				chrome.cookies.getAll({ domain: hosts[0] }, cookies => {
 					resolve(cookies)
@@ -163,8 +171,49 @@ export default {
 			}
 			return util.formatDateTime(expires * 1000)
 		},
-		onEdit() {},
-		onDelete() {}
+		onAdd() {
+			this.showForm = true
+		},
+		onEdit() {
+			this.showForm = true
+		},
+		onDelete(cookie) {
+			ElMessageBox.confirm('确认删除Cookie?', '确认', {
+				distinguishCancelAndClose: true,
+				confirmButtonText: '确认',
+				cancelButtonText: '取消'
+			})
+				.then(() => {
+					const url = `http${cookie.secure ? 's' : ''}://${cookie.domain}${cookie.path}`
+
+					chrome.cookies.remove(
+						{
+							url,
+							name: cookie.name
+						},
+						details => {
+							if (
+								details === 'null' ||
+								details === undefined ||
+								details === 'undefined'
+							) {
+								ElMessage({
+									message: '删除Cookie失败',
+									type: 'error'
+								})
+							} else {
+								ElMessage({
+									message: '删除Cookie成功',
+									type: 'success'
+								})
+							}
+						}
+					)
+				})
+				.catch(() => {
+					console.log('取消删除Cookie操作')
+				})
+		}
 	}
 }
 </script>
@@ -203,6 +252,7 @@ export default {
 
 	.operation {
 		.el-icon {
+			cursor: pointer;
 			padding: 6px;
 
 			& + .el-icon {
