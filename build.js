@@ -9,8 +9,10 @@ const pkg = require('./package.json')
 
 const dist = path.relative(__dirname, './dist')
 fse.ensureDirSync(dist)
-
 manifest.version = pkg.version
+
+const watching = process.argv[2] === '--watch'
+
 fs.writeFile(
 	path.resolve(dist, './manifest.json'),
 	JSON.stringify(manifest, null, 4),
@@ -44,7 +46,11 @@ exec('npx rollup -c rollup.config.js', (err, stdout) => {
 	}
 })
 
-exec('npx vite build', (err, stdout) => {
+let command = 'npx vite build'
+if (watching) {
+	command += ' --watch'
+}
+exec(command, (err, stdout) => {
 	console.log(chalk.green(stdout))
 	if (err) {
 		console.log(chalk.red('编译popup失败'))

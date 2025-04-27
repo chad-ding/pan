@@ -9,7 +9,7 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig(({ mode }) => {
-	console.info('开始编译打包')
+	console.info('开始编译打包: ', mode)
 
 	return {
 		base: './',

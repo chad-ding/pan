@@ -3,7 +3,7 @@
 	"description": "H5开发工具集",
 	"version": "1.0.0",
 	"manifest_version": 3,
-	"permissions": ["tabs", "activeTab"],
+	"permissions": ["tabs", "activeTab", "cookies"],
 	"action": {
 		"default_popup": "popup/index.html",
 		"default_icon": {
@@ -16,6 +16,7 @@
 	"background": {
 		"service_worker": "background/index.js"
 	},
+	"host_permissions": ["<all_urls>"],
 	"content_scripts": [
 		{
 			"matches": ["<all_urls>"],

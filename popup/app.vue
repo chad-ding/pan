@@ -15,6 +15,7 @@ import Color from '@/view/color/index.vue'
 import Json from '@/view/json/index.vue'
 import Numeric from '@/view/numeric/index.vue'
 import Pic2Base64 from '@/view/pic2base64/index.vue'
+import Cookies from '@/view/cookies/index.vue'
 
 export default {
 	data() {
@@ -22,6 +23,10 @@ export default {
 			qrcode: {
 				label: '二维码',
 				component: QrCode
+			},
+			cookies: {
+				label: 'Cookies',
+				component: Cookies
 			},
 			codec: {
 				label: '字符串编/解码',
