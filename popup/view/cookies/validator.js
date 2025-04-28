@@ -67,7 +67,7 @@ export default {
 		return /^[!#$%&'()*+\-./0-9:<=>?@A-Z[\]^_`a-z{|}~]+$/i.test(data)
 	},
 	domain(data) {
-		return /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/i.test(
+		return /^\.?(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/i.test(
 			data
 		)
 	},

@@ -89,6 +89,7 @@
 		</el-drawer>
 		<el-drawer v-model="showUploadForm" title="导入Cookie" size="90%">
 			<upload-form
+				v-if="showUploadForm"
 				:current-url="currentUrl"
 				:current-domain="currentHost"
 				@close="() => (showUploadForm = false)"
