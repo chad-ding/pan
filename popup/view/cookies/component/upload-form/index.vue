@@ -31,29 +31,17 @@ const placeholder = `支持导入Cookie键值对字符串：“name=Chad.Ding; g
 [{
 	"domain": ".pan.com",
 	"expirationDate": 1780370619.889841,
-	"hostOnly": false,
 	"httpOnly": false,
 	"name": "name",
 	"path": "/",
-	"sameSite": "unspecified",
-	"secure": false,
-	"session": false,
-	"storeId": "0",
-	"value": "Chad.Ding",
-	"id": 1
+	"value": "Chad.Ding"
 },{
 	"domain": ".pan.com",
 	"expirationDate": 1780370619.889841,
-	"hostOnly": false,
 	"httpOnly": false,
 	"name": "gender",
 	"path": "/",
-	"sameSite": "unspecified",
-	"secure": false,
-	"session": false,
-	"storeId": "0",
-	"value": "M",
-	"id": 1
+	"value": "M"
 }]"`
 
 export default {
@@ -133,7 +121,6 @@ export default {
 					}
 				],
 				domain: [
-					{ required: true, message: '请输入Domain', trigger: 'blur' },
 					{
 						trigger: 'change',
 						validator(rule, value, callback) {
@@ -178,14 +165,16 @@ export default {
 					name: item.name,
 					domain: item.domain,
 					value: item.value,
-					path: '/',
-					httpOnly: false,
+					path: item.path || '/',
+					httpOnly: !!item.httpOnly,
 					expirationDate: item.expirationDate
 				}
 
-				if (this.formFields.domain !== this.currentDomain) {
+				if (this.formFields.domain && this.formFields.domain !== this.currentDomain) {
 					cookie.domain = this.formFields.domain
-				} else {
+				} else if (cookie.domain.startsWith('.')) {
+					cookie.domain = cookie.domain.substring(1)
+				} else if (!this.formFields.domain) {
 					delete cookie.domain
 				}
 
@@ -245,6 +234,7 @@ export default {
 .note {
 	color: rgb(245, 108, 108);
 	font-size: 12px;
+	font-weight: bold;
 	margin-left: 12px;
 }
 </style>
