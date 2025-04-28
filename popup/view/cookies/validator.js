@@ -14,7 +14,7 @@ export default {
 			'id',
 			'storeId'
 		]
-		// cookie键消
+
 		if (!cookieFields.includes(key)) {
 			return false
 		}

@@ -14,7 +14,7 @@
 		</el-form-item>
 		<el-form-item label="Session" prop="session">
 			<el-checkbox v-model="formFields.session" size="small" />
-			<p class="note">非Session默认设置1个月的过期时间</p>
+			<p class="note">非Session设置30天的过期时间</p>
 		</el-form-item>
 		<el-form-item v-if="!disabled">
 			<el-button size="small" type="primary" @click="onConfirm">确认</el-button>
@@ -225,6 +225,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+:deep(textarea) {
+	word-break: break-all;
+}
+
 .note {
 	color: rgb(245, 108, 108);
 	font-size: 12px;

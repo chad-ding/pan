@@ -79,5 +79,9 @@ export default {
 		height: 300px;
 		width: 300px;
 	}
+
+	:deep(textarea) {
+		word-break: break-all;
+	}
 }
 </style>
