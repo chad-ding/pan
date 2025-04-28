@@ -7,7 +7,7 @@
 		:disabled="disabled"
 	>
 		<el-form-item label="Name" prop="name">
-			<el-input v-model="formFields.name" size="small" />
+			<el-input v-model.trim="formFields.name" size="small" />
 		</el-form-item>
 		<el-form-item label="Expires" prop="expires">
 			<el-date-picker
@@ -19,13 +19,13 @@
 			/>
 		</el-form-item>
 		<el-form-item label="Value" prop="value">
-			<el-input v-model="formFields.value" size="small" />
+			<el-input v-model.trim="formFields.value" size="small" />
 		</el-form-item>
 		<el-form-item label="Domain" prop="domain">
-			<el-input v-model="formFields.domain" size="small" />
+			<el-input v-model.trim="formFields.domain" size="small" />
 		</el-form-item>
 		<el-form-item label="Path" prop="path">
-			<el-input v-model="formFields.path" size="small" />
+			<el-input v-model.trim="formFields.path" size="small" />
 		</el-form-item>
 		<el-form-item label="HttpOnly" prop="httpOnly">
 			<el-checkbox v-model="formFields.httpOnly" size="small" />
@@ -69,14 +69,9 @@ export default {
 		}
 	},
 	data() {
-		const domain =
-			this.currentDomain.indexOf('.') !== -1
-				? this.currentDomain.substring(this.currentDomain.indexOf('.') + 1)
-				: this.currentDomain
-
 		const formFields = Object.assign(
 			{
-				domain,
+				domain: this.currentDomain,
 				...DefaultFields
 			},
 			this.value
@@ -85,10 +80,6 @@ export default {
 		if (!isNaN(formFields.expirationDate)) {
 			formFields.expires = new Date(formFields.expirationDate * 1000)
 			delete formFields.expirationDate
-		}
-
-		if (formFields.domain && formFields.domain.startsWith('.')) {
-			formFields.domain = formFields.domain.substring(1)
 		}
 
 		return {
@@ -121,7 +112,6 @@ export default {
 					}
 				],
 				domain: [
-					{ required: true, message: '请输入Domain', trigger: 'blur' },
 					{
 						trigger: 'change',
 						validator(rule, value, callback) {
@@ -163,6 +153,11 @@ export default {
 					path: this.formFields.path,
 					httpOnly: this.formFields.httpOnly,
 					domain: this.formFields.domain
+				}
+
+				// 设置当前站点domain不能传值
+				if (cookie.domain === this.currentDomain) {
+					delete cookie.domain
 				}
 
 				if (this.formFields.expires) {

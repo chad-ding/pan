@@ -2,7 +2,7 @@
 	<el-form ref="form" :model="formFields" :rules="formRules" label-width="auto">
 		<el-form-item label="Cookies" prop="cookies">
 			<el-input
-				v-model="formFields.cookies"
+				v-model.trim="formFields.cookies"
 				:placeholder="placeholder"
 				type="textarea"
 				:rows="15"
@@ -10,7 +10,7 @@
 			/>
 		</el-form-item>
 		<el-form-item label="Domain" prop="domain">
-			<el-input v-model="formFields.domain" size="small" />
+			<el-input v-model.trim="formFields.domain" size="small" />
 		</el-form-item>
 		<el-form-item label="Session" prop="session">
 			<el-checkbox v-model="formFields.session" size="small" />
@@ -68,15 +68,10 @@ export default {
 		}
 	},
 	data() {
-		const domain =
-			this.currentDomain.indexOf('.') !== -1
-				? this.currentDomain.substring(this.currentDomain.indexOf('.') + 1)
-				: this.currentDomain
-
 		return {
 			formFields: {
 				cookies: '',
-				domain,
+				domain: this.currentDomain,
 				session: false
 			},
 			formRules: {
@@ -180,10 +175,18 @@ export default {
 			cookies = cookies.map(item => {
 				const cookie = {
 					url: this.currentUrl,
-					domain: this.formFields.domain,
+					name: item.name,
+					domain: item.domain,
+					value: item.value,
 					path: '/',
 					httpOnly: false,
-					...item
+					expirationDate: item.expirationDate
+				}
+
+				if (this.formFields.domain !== this.currentDomain) {
+					cookie.domain = this.formFields.domain
+				} else {
+					delete cookie.domain
 				}
 
 				if (expirationDate) {
@@ -195,9 +198,7 @@ export default {
 
 			const res = cookies.map(cookie => {
 				return new Promise((resolve, reject) => {
-					console.log('>>>>>>>> ', cookie)
 					chrome.cookies.set(cookie, details => {
-						console.log('3333333333 ', cookie)
 						if (details) {
 							resolve(true)
 						} else {
