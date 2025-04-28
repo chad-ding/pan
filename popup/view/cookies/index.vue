@@ -8,12 +8,22 @@
 			</li>
 			<li class="menu-item">
 				<el-tooltip effect="dark" content="刷新Cookie" placement="bottom">
-					<el-icon><Refresh /></el-icon>
+					<el-icon @click="onRefresh"><Refresh /></el-icon>
 				</el-tooltip>
 			</li>
 			<li class="menu-item">
 				<el-tooltip effect="dark" content="导入Cookie" placement="bottom">
-					<el-icon><UploadFilled /></el-icon>
+					<el-icon @click="onUpload"><Upload /></el-icon>
+				</el-tooltip>
+			</li>
+			<li class="menu-item">
+				<el-tooltip effect="dark" content="导出Cookie" placement="bottom">
+					<el-icon @click="onDownload"><Download /></el-icon>
+				</el-tooltip>
+			</li>
+			<li class="menu-item">
+				<el-tooltip effect="dark" content="清空Cookie" placement="bottom">
+					<el-icon @click="onReset"><Delete /></el-icon>
 				</el-tooltip>
 			</li>
 		</ul>
@@ -67,14 +77,21 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<el-drawer v-model="showForm" :title="title" size="90%" @closed="onClose">
+		<el-drawer v-model="showCookieForm" :title="title" size="90%" @closed="onCookieFormClose">
 			<cookie-form
-				v-if="showForm"
+				v-if="showCookieForm"
 				:disabled="formDisabled"
 				:value="cookie"
 				:current-url="currentUrl"
 				:current-domain="currentHost"
-				@close="() => (showForm = false)"
+				@close="() => (showCookieForm = false)"
+			/>
+		</el-drawer>
+		<el-drawer v-model="showUploadForm" title="导入Cookie" size="90%">
+			<upload-form
+				:current-url="currentUrl"
+				:current-domain="currentHost"
+				@close="() => (showUploadForm = false)"
 			/>
 		</el-drawer>
 	</div>
@@ -84,11 +101,13 @@
 import { ElMessage, ElMessageBox } from 'element-plus'
 import util from '@/common/util'
 
-import CookieForm from './component/cookie-form.vue'
+import CookieForm from './component/cookie-form/index.vue'
+import UploadForm from './component/upload-form/index.vue'
 
 export default {
 	components: {
-		CookieForm
+		CookieForm,
+		UploadForm
 	},
 	data() {
 		return {
@@ -97,7 +116,8 @@ export default {
 			currentHost: '',
 			currentUrl: '',
 			hosts: [],
-			showForm: false,
+			showCookieForm: false,
+			showUploadForm: false,
 			cookie: undefined,
 			timer: undefined
 		}
@@ -133,7 +153,7 @@ export default {
 			if (!this.hosts.includes(cookie.domain)) {
 				return
 			}
-			console.log('cookie变动: ', changeInfo)
+
 			this.getEffectCookies()
 		})
 	},
@@ -141,7 +161,6 @@ export default {
 		// 获取当前页面有效的cookies
 		async getEffectCookies() {
 			const doGetCookie = async () => {
-				console.log('11111111111')
 				this.currentHost = await new Promise(resolve => {
 					chrome.tabs.query({ currentWindow: true, active: true }, tabs => {
 						if (!tabs || !tabs.length) {
@@ -204,21 +223,116 @@ export default {
 			}
 			return util.formatDateTime(expires * 1000)
 		},
-		onClose() {
+		onCookieFormClose() {
 			this.cookie = undefined
 			this.formDisabled = false
 		},
+		onReset() {
+			ElMessageBox.confirm('确认清除所有Cookie', '确认提示', {
+				distinguishCancelAndClose: true,
+				confirmButtonText: '确认',
+				cancelButtonText: '取消'
+			})
+				.then(() => {
+					const defer = this.cookies.map(cookie => {
+						const url = `http${cookie.secure ? 's' : ''}://${cookie.domain}${
+							cookie.path
+						}`
+
+						return new Promise((resolve, reject) => {
+							chrome.cookies.remove(
+								{
+									url,
+									name: cookie.name
+								},
+								details => {
+									if (
+										details === 'null' ||
+										details === undefined ||
+										details === 'undefined'
+									) {
+										reject(new Error('删除Cookie失败'))
+									} else {
+										resolve(true)
+									}
+								}
+							)
+						})
+					})
+
+					Promise.all(defer)
+						.then(() => {
+							ElMessage({
+								message: '清除Cookie成功',
+								type: 'success'
+							})
+						})
+						.catch(() => {
+							ElMessage({
+								message: '清除Cookie失败',
+								type: 'error'
+							})
+						})
+				})
+				.catch(() => {
+					console.log('取消删除Cookie操作')
+				})
+		},
 		onAdd() {
-			this.showForm = true
+			this.showCookieForm = true
 		},
 		onEdit(data) {
 			this.cookie = data
-			this.showForm = true
+			this.showCookieForm = true
 		},
 		onShow(data) {
 			this.formDisabled = true
 			this.cookie = data
-			this.showForm = true
+			this.showCookieForm = true
+		},
+		onRefresh() {
+			this.getEffectCookies()
+			ElMessage({
+				message: '刷新Cookie成功',
+				type: 'success'
+			})
+		},
+		onUpload() {
+			this.showUploadForm = true
+		},
+		onDownload() {
+			if (!this.cookies.length) {
+				ElMessage({
+					message: '没有获取到Cookie',
+					type: 'error'
+				})
+				return
+			}
+
+			try {
+				let string = ''
+				string += '[\n'
+				for (let i = 0; i < this.cookies.length; i++) {
+					const cookie = this.cookies[i]
+					cookie.id = i + 1
+					string += JSON.stringify(cookie, null, 4)
+					if (i < this.cookies.length - 1) {
+						string += ',\n'
+					}
+				}
+				string += '\n]'
+
+				util.copy(string)
+				ElMessage({
+					message: '导出Cookie成功',
+					type: 'success'
+				})
+			} catch (e) {
+				ElMessage({
+					message: '导出Cookie失败',
+					type: 'error'
+				})
+			}
 		},
 		onDelete(cookie) {
 			ElMessageBox.confirm(`确认删除${cookie.name}`, '确认提示', {

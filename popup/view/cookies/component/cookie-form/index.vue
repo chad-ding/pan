@@ -39,6 +39,7 @@
 
 <script>
 import { ElMessage } from 'element-plus'
+import validator from '../../validator'
 
 const DefaultFields = {
 	name: '',
@@ -68,9 +69,14 @@ export default {
 		}
 	},
 	data() {
+		const domain =
+			this.currentDomain.indexOf('.') !== -1
+				? this.currentDomain.substring(this.currentDomain.indexOf('.') + 1)
+				: this.currentDomain
+
 		const formFields = Object.assign(
 			{
-				domain: this.currentDomain,
+				domain,
 				...DefaultFields
 			},
 			this.value
@@ -81,6 +87,10 @@ export default {
 			delete formFields.expirationDate
 		}
 
+		if (formFields.domain && formFields.domain.startsWith('.')) {
+			formFields.domain = formFields.domain.substring(1)
+		}
+
 		return {
 			formFields,
 			formRules: {
@@ -89,7 +99,7 @@ export default {
 					{
 						trigger: 'change',
 						validator(rule, value, callback) {
-							if (!/^[!#$%&'*+-.^_`|~0-9a-zA-Z]+$/i.test(value)) {
+							if (!validator.name(value)) {
 								callback(new Error('Cookie名称不合法'))
 							}
 
@@ -97,17 +107,25 @@ export default {
 						}
 					}
 				],
-				value: [{ required: true, message: '请输入Cookie值', trigger: 'blur' }],
+				value: [
+					{ required: true, message: '请输入Cookie值', trigger: 'blur' },
+					{
+						trigger: 'change',
+						validator(rule, value, callback) {
+							if (!validator.value(value)) {
+								callback(new Error('Cookie值不合法'))
+							}
+
+							callback()
+						}
+					}
+				],
 				domain: [
 					{ required: true, message: '请输入Domain', trigger: 'blur' },
 					{
 						trigger: 'change',
 						validator(rule, value, callback) {
-							if (
-								!/^\.?(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/i.test(
-									value
-								)
-							) {
+							if (!validator.domain(value)) {
 								callback(new Error('Domain不合法'))
 							}
 
@@ -120,10 +138,7 @@ export default {
 					{
 						trigger: 'change',
 						validator(rule, value, callback) {
-							if (
-								value !== '/' &&
-								!/^(\/[a-zA-Z0-9\-._~%!$&'()*+,;=:@]+)+\/?$/i.test(value)
-							) {
+							if (value !== '/' && !validator.path(value)) {
 								callback(new Error('Path不合法'))
 							}
 
@@ -146,7 +161,8 @@ export default {
 					name: this.formFields.name,
 					value: this.formFields.value,
 					path: this.formFields.path,
-					httpOnly: this.formFields.httpOnly
+					httpOnly: this.formFields.httpOnly,
+					domain: this.formFields.domain
 				}
 
 				if (this.formFields.expires) {
