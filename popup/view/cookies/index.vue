@@ -27,7 +27,7 @@
 				</el-tooltip>
 			</li>
 		</ul>
-		<el-table :data="cookies" style="width: 100%" height="450" stripe>
+		<el-table v-loading="loading" :data="cookies" style="width: 100%" height="450" stripe>
 			<el-table-column
 				prop="name"
 				label="Name"
@@ -120,7 +120,8 @@ export default {
 			showCookieForm: false,
 			showUploadForm: false,
 			cookie: undefined,
-			timer: undefined
+			timer: undefined,
+			loading: false
 		}
 	},
 	computed: {
@@ -161,6 +162,7 @@ export default {
 	methods: {
 		// 获取当前页面有效的cookies
 		async getEffectCookies() {
+			this.loading = true
 			const doGetCookie = async () => {
 				this.currentHost = await new Promise(resolve => {
 					chrome.tabs.query({ currentWindow: true, active: true }, tabs => {
@@ -187,6 +189,7 @@ export default {
 				this.cookies = allCookies.filter(item => {
 					return hosts.includes(item.domain)
 				})
+				this.loading = false
 			}
 
 			// 设置防抖
@@ -325,7 +328,7 @@ export default {
 
 				util.copy(string)
 				ElMessage({
-					message: '导出Cookie成功',
+					message: '成功导出Cookie并复制',
 					type: 'success'
 				})
 			} catch (e) {
