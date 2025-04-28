@@ -17,7 +17,7 @@
 				</el-tooltip>
 			</li>
 		</ul>
-		<el-table :data="cookies" style="width: 100%" height="350" stripe>
+		<el-table :data="cookies" style="width: 100%" height="450" stripe>
 			<el-table-column
 				prop="name"
 				label="Name"
@@ -27,7 +27,9 @@
 			>
 				<template #default="scope">
 					<el-tooltip effect="dark" :content="scope.row.name" placement="bottom">
-						<p class="column-item">{{ scope.row.name }}</p>
+						<p class="column-item interactive" @click="() => onShow(scope.row)">
+							{{ scope.row.name }}
+						</p>
 					</el-tooltip>
 				</template>
 			</el-table-column>
@@ -65,8 +67,15 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<el-drawer v-model="showForm" title="编辑Cookie" size="90%">
-			<cookie-form :current-domain="currentHost" @close="() => (showForm = false)" />
+		<el-drawer v-model="showForm" :title="title" size="90%" @closed="onClose">
+			<cookie-form
+				v-if="showForm"
+				:disabled="formDisabled"
+				:value="cookie"
+				:current-url="currentUrl"
+				:current-domain="currentHost"
+				@close="() => (showForm = false)"
+			/>
 		</el-drawer>
 	</div>
 </template>
@@ -83,10 +92,14 @@ export default {
 	},
 	data() {
 		return {
+			formDisabled: false,
 			cookies: [],
 			currentHost: '',
+			currentUrl: '',
 			hosts: [],
-			showForm: false
+			showForm: false,
+			cookie: undefined,
+			timer: undefined
 		}
 	},
 	computed: {
@@ -95,6 +108,15 @@ export default {
 				text: item.name,
 				value: item.name
 			}))
+		},
+		title() {
+			if (this.formDisabled) {
+				return 'Cookie信息'
+			} else if (this.cookie) {
+				return '编辑Cookie'
+			}
+
+			return '新增Cookie'
 		}
 	},
 	created() {
@@ -118,29 +140,40 @@ export default {
 	methods: {
 		// 获取当前页面有效的cookies
 		async getEffectCookies() {
-			this.currentHost = await new Promise(resolve => {
-				chrome.tabs.query({ currentWindow: true, active: true }, tabs => {
-					if (!tabs || !tabs.length) {
-						resolve(undefined)
-					}
+			const doGetCookie = async () => {
+				console.log('11111111111')
+				this.currentHost = await new Promise(resolve => {
+					chrome.tabs.query({ currentWindow: true, active: true }, tabs => {
+						if (!tabs || !tabs.length) {
+							resolve(undefined)
+						}
 
-					const host = new URL(tabs[0].url).hostname
-					resolve(host)
+						this.currentUrl = tabs[0].url
+
+						const host = new URL(this.currentUrl).hostname
+						resolve(host)
+					})
 				})
-			})
 
-			const hosts = this.getHostTree(this.currentHost)
+				const hosts = this.getHostTree(this.currentHost)
 
-			const allCookies = await new Promise(resolve => {
-				chrome.cookies.getAll({ domain: hosts[0] }, cookies => {
-					resolve(cookies)
+				const allCookies = await new Promise(resolve => {
+					chrome.cookies.getAll({ domain: hosts[0] }, cookies => {
+						resolve(cookies)
+					})
 				})
-			})
 
-			// 筛选出当前页面生效的cookie
-			this.cookies = allCookies.filter(item => {
-				return hosts.includes(item.domain)
-			})
+				// 筛选出当前页面生效的cookie
+				this.cookies = allCookies.filter(item => {
+					return hosts.includes(item.domain)
+				})
+			}
+
+			// 设置防抖
+			if (this.timer) {
+				clearTimeout(this.timer)
+			}
+			this.timer = setTimeout(doGetCookie, 1000)
 		},
 		getHostTree(fullHost) {
 			if (this.hosts.length) {
@@ -171,14 +204,24 @@ export default {
 			}
 			return util.formatDateTime(expires * 1000)
 		},
+		onClose() {
+			this.cookie = undefined
+			this.formDisabled = false
+		},
 		onAdd() {
 			this.showForm = true
 		},
-		onEdit() {
+		onEdit(data) {
+			this.cookie = data
+			this.showForm = true
+		},
+		onShow(data) {
+			this.formDisabled = true
+			this.cookie = data
 			this.showForm = true
 		},
 		onDelete(cookie) {
-			ElMessageBox.confirm('确认删除Cookie?', '确认', {
+			ElMessageBox.confirm(`确认删除${cookie.name}`, '确认提示', {
 				distinguishCancelAndClose: true,
 				confirmButtonText: '确认',
 				cancelButtonText: '取消'
@@ -228,8 +271,12 @@ export default {
 
 <style lang="less" scoped>
 .cookies {
-	height: 100%;
+	height: 500px;
 	width: 100%;
+
+	:deep(.el-drawer__header) {
+		margin-bottom: 0;
+	}
 
 	.menus {
 		align-items: center;
@@ -265,6 +312,10 @@ export default {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+
+		&.interactive {
+			cursor: pointer;
+		}
 	}
 }
 </style>
