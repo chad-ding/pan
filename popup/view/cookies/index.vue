@@ -2,27 +2,27 @@
 	<div class="cookies">
 		<ul class="menus">
 			<li class="menu-item">
-				<el-tooltip effect="dark" content="增加Cookie" placement="bottom">
+				<el-tooltip effect="dark" content="添加" placement="bottom">
 					<el-icon @click="onAdd"><CirclePlus /></el-icon>
 				</el-tooltip>
 			</li>
 			<li class="menu-item">
-				<el-tooltip effect="dark" content="刷新Cookie" placement="bottom">
+				<el-tooltip effect="dark" content="刷新" placement="bottom">
 					<el-icon @click="onRefresh"><Refresh /></el-icon>
 				</el-tooltip>
 			</li>
 			<li class="menu-item">
-				<el-tooltip effect="dark" content="导入Cookie" placement="bottom">
+				<el-tooltip effect="dark" content="导入" placement="bottom">
 					<el-icon @click="onUpload"><Upload /></el-icon>
 				</el-tooltip>
 			</li>
 			<li class="menu-item">
-				<el-tooltip effect="dark" content="导出Cookie" placement="bottom">
+				<el-tooltip effect="dark" content="导出" placement="bottom">
 					<el-icon @click="onDownload"><Download /></el-icon>
 				</el-tooltip>
 			</li>
 			<li class="menu-item">
-				<el-tooltip effect="dark" content="清空Cookie" placement="bottom">
+				<el-tooltip effect="dark" content="清空" placement="bottom">
 					<el-icon @click="onReset"><Delete /></el-icon>
 				</el-tooltip>
 			</li>
@@ -405,6 +405,10 @@ export default {
 			cursor: pointer;
 			font-size: 24px;
 			padding: 6px;
+
+			&:active {
+				opacity: 0.3;
+			}
 
 			& + .menu-item {
 				margin-left: 24px;
