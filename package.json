@@ -4,9 +4,11 @@
 	"version": "1.1.0",
 	"scripts": {
 		"dev": "vite --mode=development --open",
-		"watch": "node build.js --watch",
+		"watch": "node ./build/backend.js --watch & node ./build/frontend.js --watch",
 		"pub": "npm run build && npm run zip",
-		"build": "node build.js",
+		"build": "npm run build:f & npm run build:b",
+		"build:f": "node ./build/frontend.js",
+		"build:b": "node ./build/backend.js",
 		"zip": "node zip.js",
 		"c": "cz"
 	},
