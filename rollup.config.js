@@ -1,3 +1,5 @@
+const { terser } = require('rollup-plugin-terser')
+
 module.exports = [
 	{
 		input: './content/index.js',
@@ -6,6 +8,9 @@ module.exports = [
 			format: 'iife',
 			name: 'index.js'
 		},
+		plugins: [
+			terser() // 使用terser进行压缩
+		],
 		watch: {
 			include: 'content/**',
 			exclude: 'node_modules/**',
@@ -19,6 +24,9 @@ module.exports = [
 			format: 'iife',
 			name: 'index.js'
 		},
+		plugins: [
+			terser() // 使用terser进行压缩
+		],
 		watch: {
 			include: 'background/**',
 			exclude: 'node_modules/**',
