@@ -36,9 +36,9 @@ fs.cp(path.resolve(__dirname, '../icon'), path.join(dist, '../icon'), { recursiv
 	}
 })
 
-let command = 'npx rollup -c rollup.config.js'
+let command = 'rollup -c rollup.config.js'
 if (watching) {
-	command = 'npx rollup -c --watch rollup.config.js'
+	command = 'rollup -c --watch --verbose rollup.config.js'
 }
 
 exec(command, (err, stdout) => {

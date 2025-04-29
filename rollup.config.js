@@ -5,6 +5,11 @@ module.exports = [
 			dir: 'dist/content',
 			format: 'iife',
 			name: 'index.js'
+		},
+		watch: {
+			include: 'content/**',
+			exclude: 'node_modules/**',
+			clearScreen: false // 可选，是否在重建时清屏
 		}
 	},
 	{
@@ -13,6 +18,11 @@ module.exports = [
 			dir: 'dist/background',
 			format: 'iife',
 			name: 'index.js'
+		},
+		watch: {
+			include: 'background/**',
+			exclude: 'node_modules/**',
+			clearScreen: false // 可选，是否在重建时清屏
 		}
 	}
 ]

@@ -8,7 +8,7 @@ fse.ensureDirSync(dist)
 
 const watching = process.argv[2] === '--watch'
 
-let command = 'npx vite build'
+let command = 'vite build'
 if (watching) {
 	command += ' --watch'
 }
