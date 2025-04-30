@@ -12,6 +12,7 @@ let command = 'vite build'
 if (watching) {
 	command += ' --watch'
 }
+
 exec(command, (err, stdout) => {
 	console.log(chalk.green(stdout))
 	if (err) {

@@ -114,8 +114,8 @@ export default {
 		return {
 			formDisabled: false,
 			cookies: [],
-			currentHost: '',
-			currentUrl: '',
+			currentHost: '', // 当前页面域名
+			currentUrl: '', // 当前页面链接
 			hosts: [],
 			showCookieForm: false,
 			showUploadForm: false,
@@ -164,20 +164,13 @@ export default {
 		async getEffectCookies() {
 			this.loading = true
 			const doGetCookie = async () => {
-				this.currentHost = await new Promise(resolve => {
-					chrome.tabs.query({ currentWindow: true, active: true }, tabs => {
-						if (!tabs || !tabs.length) {
-							resolve(undefined)
-						}
+				const tab = await util.getCurrentTab()
+				if (tab) {
+					this.currentUrl = tab.url
+					this.currentHost = new URL(this.currentUrl).hostname
+				}
 
-						this.currentUrl = tabs[0].url
-
-						const host = new URL(this.currentUrl).hostname
-						resolve(host)
-					})
-				})
-
-				const hosts = this.getHostTree(this.currentHost)
+				const hosts = this.getFlatHost(this.currentHost)
 
 				const allCookies = await new Promise(resolve => {
 					chrome.cookies.getAll({ domain: hosts[0] }, cookies => {
@@ -198,7 +191,7 @@ export default {
 			}
 			this.timer = setTimeout(doGetCookie, 1000)
 		},
-		getHostTree(fullHost) {
+		getFlatHost(fullHost) {
 			if (this.hosts.length) {
 				return this.hosts
 			}
@@ -209,6 +202,7 @@ export default {
 			const hosts = []
 			list.forEach((item, index, array) => {
 				host = `${index === array.length - 1 ? '' : '.'}${item}` + host
+				// 忽略通用域名后缀
 				if (!['com', 'cn', 'net', 'org'].includes(item)) {
 					hosts.push(host)
 				}

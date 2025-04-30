@@ -14,6 +14,7 @@
 
 <script>
 import QRCode from 'qrcode'
+import util from '@/common/util'
 
 const defaultText = '钓鱼岛是中国的'
 
@@ -29,14 +30,11 @@ export default {
 		}
 	},
 	created() {
-		if (chrome && chrome.tabs) {
-			chrome.tabs.query({ currentWindow: true, active: true }, tabs => {
-				if (!tabs || !tabs.length) {
-					return
-				}
-				this.content = tabs[0].url
-			})
-		}
+		util.getCurrentTab().then(tab => {
+			if (tab) {
+				this.content = tab.url
+			}
+		})
 	},
 	mounted() {
 		this.draw(this.content)

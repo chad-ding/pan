@@ -1,4 +1,18 @@
 export default {
+	getCurrentTab() {
+		return new Promise(resolve => {
+			if (!chrome || !chrome.tabs) {
+				resolve()
+			}
+
+			chrome.tabs.query({ currentWindow: true, active: true }, tabs => {
+				if (!tabs || !tabs.length) {
+					resolve()
+				}
+				resolve(tabs[0])
+			})
+		})
+	},
 	formatDateTime(timestamp, pattern = 'yyyy-mm-dd HH:MM:SS') {
 		const TOKEN = /d{1,2}|m{1,2}|yy(?:yy)?|([HMS])\1?|[L]|"[^"]*"|'[^']*'/g
 
