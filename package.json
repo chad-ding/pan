@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "vite --mode=development --open",
 		"watch": "run-p watch:f watch:b",
-		"build": "run-p build:b build:f",
+		"build": "rm -rf ./dist && run-p build:b build:f",
 		"watch:b": "node ./build/backend.js --watch",
 		"watch:f": "node ./build/frontend.js --watch",
 		"build:b": "node ./build/backend.js",
@@ -52,6 +52,7 @@
 		"eslint-plugin-promise": "^4.3.1",
 		"eslint-plugin-vue": "^7.20.0",
 		"fs-extra": "^11.2.0",
+		"glob": "^11.0.2",
 		"husky": "^4.3.8",
 		"ip": "^2.0.0",
 		"less": "^4.1.3",

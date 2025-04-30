@@ -20,7 +20,7 @@
 	"content_scripts": [
 		{
 			"matches": ["<all_urls>"],
-			"js": ["content/index.js"],
+			"js": ["content/pre-process.js"],
 			"run_at": "document_start"
 		}
 	]

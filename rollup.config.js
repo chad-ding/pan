@@ -1,22 +1,27 @@
 const { terser } = require('rollup-plugin-terser')
+const { glob } = require('glob')
 
-module.exports = [
-	{
-		input: './content/index.js',
+function getContentEntries() {
+	const files = glob.sync('./content/*.js').reduce((entries, file) => {
+		entries.push(file)
+		return entries
+	}, [])
+
+	return files.map(item => ({
+		input: item,
 		output: {
 			dir: 'dist/content',
 			format: 'iife',
-			name: 'index.js'
+			name: '[name].js'
 		},
 		plugins: [
 			terser() // 使用terser进行压缩
-		],
-		watch: {
-			include: 'content/**',
-			exclude: 'node_modules/**',
-			clearScreen: false // 可选，是否在重建时清屏
-		}
-	},
+		]
+	}))
+}
+
+module.exports = [
+	...getContentEntries(),
 	{
 		input: './background/index.js',
 		output: {
@@ -26,11 +31,6 @@ module.exports = [
 		},
 		plugins: [
 			terser() // 使用terser进行压缩
-		],
-		watch: {
-			include: 'background/**',
-			exclude: 'node_modules/**',
-			clearScreen: false // 可选，是否在重建时清屏
-		}
+		]
 	}
 ]
