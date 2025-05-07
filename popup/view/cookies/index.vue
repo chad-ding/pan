@@ -225,6 +225,29 @@ export default {
 			this.cookie = undefined
 			this.formDisabled = false
 		},
+		deleteCookie(cookie) {
+			const url = `http${cookie.secure ? 's' : ''}://${cookie.domain}${cookie.path}`
+
+			return new Promise((resolve, reject) => {
+				chrome.cookies.remove(
+					{
+						url,
+						name: cookie.name
+					},
+					details => {
+						if (
+							details === 'null' ||
+							details === undefined ||
+							details === 'undefined'
+						) {
+							reject(new Error('删除Cookie失败'))
+						} else {
+							resolve(true)
+						}
+					}
+				)
+			})
+		},
 		onReset() {
 			ElMessageBox.confirm('确认清除所有Cookie', '确认提示', {
 				distinguishCancelAndClose: true,
@@ -233,29 +256,7 @@ export default {
 			})
 				.then(() => {
 					const defer = this.cookies.map(cookie => {
-						const url = `http${cookie.secure ? 's' : ''}://${cookie.domain}${
-							cookie.path
-						}`
-
-						return new Promise((resolve, reject) => {
-							chrome.cookies.remove(
-								{
-									url,
-									name: cookie.name
-								},
-								details => {
-									if (
-										details === 'null' ||
-										details === undefined ||
-										details === 'undefined'
-									) {
-										reject(new Error('删除Cookie失败'))
-									} else {
-										resolve(true)
-									}
-								}
-							)
-						})
+						return this.deleteCookie(cookie)
 					})
 
 					Promise.all(defer)
@@ -339,31 +340,19 @@ export default {
 				cancelButtonText: '取消'
 			})
 				.then(() => {
-					const url = `http${cookie.secure ? 's' : ''}://${cookie.domain}${cookie.path}`
-
-					chrome.cookies.remove(
-						{
-							url,
-							name: cookie.name
-						},
-						details => {
-							if (
-								details === 'null' ||
-								details === undefined ||
-								details === 'undefined'
-							) {
-								ElMessage({
-									message: '删除Cookie失败',
-									type: 'error'
-								})
-							} else {
-								ElMessage({
-									message: '删除Cookie成功',
-									type: 'success'
-								})
-							}
-						}
-					)
+					this.deleteCookie(cookie)
+						.then(() => {
+							ElMessage({
+								message: '删除Cookie成功',
+								type: 'success'
+							})
+						})
+						.catch(() => {
+							ElMessage({
+								message: '删除Cookie失败',
+								type: 'error'
+							})
+						})
 				})
 				.catch(() => {
 					console.log('取消删除Cookie操作')
