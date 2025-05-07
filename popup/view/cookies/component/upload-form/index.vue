@@ -167,13 +167,11 @@ export default {
 					value: item.value,
 					path: item.path || '/',
 					httpOnly: !!item.httpOnly,
-					expirationDate: expirationDate || item.expirationDate
+					expirationDate: item.expirationDate || expirationDate
 				}
 
-				if (this.formFields.domain && this.formFields.domain !== this.currentDomain) {
+				if (!item.domain && this.formFields.domain) {
 					cookie.domain = this.formFields.domain
-				} else if (!this.formFields.domain) {
-					delete cookie.domain
 				}
 
 				return cookie
