@@ -65,7 +65,6 @@
 					:rows="6"
 					resize="none"
 					placeholder="请输入图片base64"
-					@input="onBase64Input"
 				/>
 				<div class="content">
 					<el-image
