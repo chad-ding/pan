@@ -239,9 +239,12 @@ export default {
 	.container {
 		flex-grow: 1;
 		overflow: hidden;
+		padding-left: 6px;
 
 		:deep(.el-upload-list__item + .el-upload) {
-			display: none;
+			opacity: 0;
+			overflow: hidden;
+			width: 1px;
 		}
 	}
 
