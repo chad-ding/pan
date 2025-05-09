@@ -1,29 +1,39 @@
 <template>
 	<div class="cookies">
 		<ul class="menus">
-			<li class="menu-item">
+			<li class="menu-item" @click="onAdd">
 				<el-tooltip effect="dark" content="添加" placement="bottom">
-					<el-icon @click="onAdd"><CirclePlus /></el-icon>
+					<el-icon><CirclePlus /></el-icon>
 				</el-tooltip>
 			</li>
-			<li class="menu-item">
+			<li class="menu-item" @click="onRefresh">
 				<el-tooltip effect="dark" content="刷新" placement="bottom">
-					<el-icon @click="onRefresh"><Refresh /></el-icon>
+					<el-icon><Refresh /></el-icon>
 				</el-tooltip>
 			</li>
-			<li class="menu-item">
+			<li class="menu-item" @click="onImport">
 				<el-tooltip effect="dark" content="导入" placement="bottom">
-					<el-icon @click="onUpload"><Upload /></el-icon>
+					<el-icon><Upload /></el-icon>
 				</el-tooltip>
 			</li>
-			<li class="menu-item">
+			<li class="menu-item" @click="onExport">
 				<el-tooltip effect="dark" content="导出" placement="bottom">
-					<el-icon @click="onDownload"><Download /></el-icon>
+					<el-icon><Download /></el-icon>
 				</el-tooltip>
 			</li>
-			<li class="menu-item">
+			<li class="menu-item" @click="() => onSetAllCookie(true)">
+				<el-tooltip effect="dark" content="生效" placement="bottom">
+					<el-icon><CircleCheck /></el-icon>
+				</el-tooltip>
+			</li>
+			<li class="menu-item" @click="() => onSetAllCookie(false)">
+				<el-tooltip effect="dark" content="失效" placement="bottom">
+					<el-icon><CircleClose /></el-icon>
+				</el-tooltip>
+			</li>
+			<li class="menu-item" @click="onReset">
 				<el-tooltip effect="dark" content="清空" placement="bottom">
-					<el-icon @click="onReset"><Delete /></el-icon>
+					<el-icon><Delete /></el-icon>
 				</el-tooltip>
 			</li>
 		</ul>
@@ -68,9 +78,18 @@
 					</el-tooltip>
 				</template>
 			</el-table-column>
-			<el-table-column label="操作">
+			<el-table-column width="120" label="操作">
 				<template #default="scope">
 					<p class="operation">
+						<el-icon
+							v-if="scope.row.path === '/__disable_cookie__'"
+							@click="() => onSetCookie(scope.row, true)"
+						>
+							<CircleCheck />
+						</el-icon>
+						<el-icon v-else @click="() => onSetCookie(scope.row, false)">
+							<CircleClose />
+						</el-icon>
 						<el-icon @click="() => onEdit(scope.row)"><Edit /></el-icon>
 						<el-icon @click="() => onDelete(scope.row)"><Delete /></el-icon>
 					</p>
@@ -182,6 +201,7 @@ export default {
 				this.cookies = allCookies.filter(item => {
 					return hosts.includes(item.domain)
 				})
+
 				this.loading = false
 			}
 
@@ -296,10 +316,74 @@ export default {
 				type: 'success'
 			})
 		},
-		onUpload() {
+		onSetAllCookie(enable) {
+			ElMessageBox.confirm(
+				`确认设置所有Cookie状态${enable ? '生效' : '失效'}？`,
+				'确认提示',
+				{
+					distinguishCancelAndClose: true,
+					confirmButtonText: '确认',
+					cancelButtonText: '取消'
+				}
+			)
+				.then(() => {
+					this.cookies.forEach(cookie => {
+						this.deleteCookie(cookie).then(() => {
+							const options = {
+								url: this.currentUrl,
+								domain: cookie.domain,
+								expirationDate: cookie.expirationDate,
+								httpOnly: cookie.httpOnly,
+								name: cookie.name,
+								value: cookie.value,
+								path: enable ? '/' : '/__disable_cookie__'
+							}
+
+							chrome.cookies.set(options, details => {
+								console.log('设置Cookie状态: ', details)
+							})
+						})
+					})
+				})
+				.catch(e => {
+					console.error('取消设置所有Cookie操作: ', e)
+				})
+		},
+		onSetCookie(cookie, enable = false) {
+			ElMessageBox.confirm(
+				`确认设置${cookie.name}状态${enable ? '生效' : '失效'}？`,
+				'确认提示',
+				{
+					distinguishCancelAndClose: true,
+					confirmButtonText: '确认',
+					cancelButtonText: '取消'
+				}
+			)
+				.then(() => {
+					this.deleteCookie(cookie).then(() => {
+						const options = {
+							url: this.currentUrl,
+							domain: cookie.domain,
+							expirationDate: cookie.expirationDate,
+							httpOnly: cookie.httpOnly,
+							name: cookie.name,
+							value: cookie.value,
+							path: enable ? '/' : '/__disable_cookie__'
+						}
+
+						chrome.cookies.set(options, details => {
+							console.log('设置Cookie状态: ', details)
+						})
+					})
+				})
+				.catch(e => {
+					console.error('取消设置Cookie操作: ', e)
+				})
+		},
+		onImport() {
 			this.showUploadForm = true
 		},
-		onDownload() {
+		onExport() {
 			if (!this.cookies.length) {
 				ElMessage({
 					message: '没有获取到Cookie',
@@ -334,7 +418,7 @@ export default {
 			}
 		},
 		onDelete(cookie) {
-			ElMessageBox.confirm(`确认删除${cookie.name}`, '确认提示', {
+			ElMessageBox.confirm(`确认删除${cookie.name}？`, '确认提示', {
 				distinguishCancelAndClose: true,
 				confirmButtonText: '确认',
 				cancelButtonText: '取消'
