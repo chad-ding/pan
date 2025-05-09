@@ -198,9 +198,13 @@ export default {
 				})
 
 				// 筛选出当前页面生效的cookie
-				this.cookies = allCookies.filter(item => {
-					return hosts.includes(item.domain)
-				})
+				this.cookies = allCookies
+					.filter(item => {
+						return hosts.includes(item.domain)
+					})
+					.sort((pre, post) => {
+						return pre.name.localeCompare(post.name, undefined, { sensitivity: 'base' })
+					})
 
 				this.loading = false
 			}
