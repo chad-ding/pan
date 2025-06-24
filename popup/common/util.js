@@ -1,4 +1,10 @@
 export default {
+	// 是否原始类型数据
+	isPrimitiveType(data) {
+		const type = typeof data
+
+		return data === null || data === undefined || ['string', 'number', 'boolean'].includes(type)
+	},
 	getCurrentTab() {
 		return new Promise(resolve => {
 			if (!chrome || !chrome.tabs) {

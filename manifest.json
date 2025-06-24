@@ -3,12 +3,16 @@
 	"description": "H5开发工具集",
 	"version": "1.0.0",
 	"manifest_version": 3,
-	"permissions": ["tabs", "activeTab", "cookies"],
+	"permissions": ["tabs", "activeTab", "cookies", "storage", "scripting"],
 	"action": {
 		"default_popup": "popup/index.html",
 		"default_icon": {
 			"128": "icon/pan.png"
 		}
+	},
+	"content_security_policy": {
+		"extension_pages": "script-src 'self'; object-src 'self'",
+		"sandbox": "sandbox allow-scripts; script-src 'self' 'unsafe-eval'; child-src 'self';"
 	},
 	"icons": {
 		"128": "icon/pan.png"

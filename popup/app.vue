@@ -1,6 +1,6 @@
 <template>
 	<div class="app">
-		<el-tabs v-model="currenTab">
+		<el-tabs v-model="currenTab" @tab-change="onTabChange">
 			<el-tab-pane v-for="(value, key) of tabs" :key="key" :name="key" :label="value.label">
 				<component :is="value.component" />
 			</el-tab-pane>
@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import storage from './common/storage'
+
 import QrCode from '@/view/qrcode/index.vue'
 import Codec from '@/view/codec/index.vue'
 import Color from '@/view/color/index.vue'
@@ -16,6 +18,8 @@ import Json from '@/view/json/index.vue'
 import Numeric from '@/view/numeric/index.vue'
 import Pic2Base64 from '@/view/pic2base64/index.vue'
 import Cookies from '@/view/cookies/index.vue'
+
+const StorageKey = 'currentTabName'
 
 export default {
 	data() {
@@ -53,6 +57,18 @@ export default {
 		return {
 			tabs,
 			currenTab: 'qrcode'
+		}
+	},
+	created() {
+		storage.get(StorageKey, true).then(tabName => {
+			if (tabName) {
+				this.currenTab = tabName
+			}
+		})
+	},
+	methods: {
+		onTabChange(tabName) {
+			storage.set(StorageKey, tabName, true)
 		}
 	}
 }
