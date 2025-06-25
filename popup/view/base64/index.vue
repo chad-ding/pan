@@ -1,5 +1,5 @@
 <template>
-	<div class="pic2base64">
+	<div class="base64">
 		<div>
 			<el-menu :default-active="activeMenu">
 				<el-menu-item index="base64" @click="onMenuClick">
@@ -196,7 +196,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.pic2base64 {
+.base64 {
 	display: flex;
 	flex-direction: row;
 	height: 100%;
@@ -251,8 +251,12 @@ export default {
 		align-items: flex-end;
 		display: flex;
 		flex-direction: row;
-		margin-top: 24px;
+		margin: 24px 0;
 		padding: 0 4px;
+
+		.el-image {
+			box-shadow: 3px 3px 20px #3131341f;
+		}
 
 		.card {
 			width: 100%;

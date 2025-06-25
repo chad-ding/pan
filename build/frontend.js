@@ -1,10 +1,5 @@
-const path = require('path')
 const exec = require('child_process').exec
-const fse = require('fs-extra')
 const chalk = require('chalk')
-
-const dist = path.relative(__dirname, '../dist')
-fse.ensureDirSync(dist)
 
 const watching = process.argv[2] === '--watch'
 

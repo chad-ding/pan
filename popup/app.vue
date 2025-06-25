@@ -1,7 +1,7 @@
 <template>
 	<div class="app">
 		<el-tabs v-model="currenTab" @tab-change="onTabChange">
-			<el-tab-pane v-for="(value, key) of tabs" :key="key" :name="key" :label="value.label">
+			<el-tab-pane v-for="(value, key) in tabs" :key="key" :name="key" :label="value.label">
 				<component :is="value.component" />
 			</el-tab-pane>
 		</el-tabs>
@@ -16,7 +16,7 @@ import Codec from '@/view/codec/index.vue'
 import Color from '@/view/color/index.vue'
 import Json from '@/view/json/index.vue'
 import Numeric from '@/view/numeric/index.vue'
-import Pic2Base64 from '@/view/pic2base64/index.vue'
+import Base64 from '@/view/base64/index.vue'
 import Cookies from '@/view/cookies/index.vue'
 
 const StorageKey = 'currentTabName'
@@ -44,9 +44,9 @@ export default {
 				label: 'JSON格式化',
 				component: Json
 			},
-			pic2base64: {
-				label: '图片转base64',
-				component: Pic2Base64
+			base64: {
+				label: 'Base64',
+				component: Base64
 			},
 			numeric: {
 				label: '数字转化',

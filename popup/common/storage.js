@@ -20,6 +20,10 @@ export default {
 						const storage = session ? sessionStorage : localStorage
 						const res = storage.getItem(StorageKey)
 
+						if (!res) {
+							return undefined
+						}
+
 						try {
 							const data = JSON.parse(res)
 
