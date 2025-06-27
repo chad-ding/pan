@@ -1,8 +1,10 @@
 <template>
 	<div class="qrcode">
-		<canvas ref="canvas" class="canvas" @click="onClick" />
+		<div class="container" :class="{ fulfilled: !!content }">
+			<canvas ref="canvas" class="canvas" @click="onClick" />
+		</div>
 		<el-input
-			v-model="content"
+			v-model.trim="content"
 			:rows="5"
 			type="textarea"
 			placeholder="请输入内容"
@@ -49,10 +51,9 @@ export default {
 			util.download(dataURL, 'png')
 		},
 		draw(content) {
-			if (!content.trim()) {
-				content = defaultText
+			if (!content) {
+				return
 			}
-
 			QRCode.toCanvas(
 				this.$refs.canvas,
 				content,
@@ -81,10 +82,33 @@ export default {
 	flex-direction: column;
 	width: 100%;
 
-	.canvas {
-		cursor: pointer;
+	.container {
 		height: 300px;
+		position: relative;
 		width: 300px;
+
+		.canvas {
+			cursor: pointer;
+			height: 100%;
+			opacity: 0;
+			width: 100%;
+		}
+
+		&.fulfilled {
+			.canvas {
+				opacity: 1;
+			}
+		}
+
+		&:not(.fulfilled)::before {
+			background: url('@/image/empty.png') center / 120px auto no-repeat;
+			bottom: 0;
+			content: '';
+			left: 0;
+			position: absolute;
+			right: 0;
+			top: 0;
+		}
 	}
 
 	:deep(textarea) {
