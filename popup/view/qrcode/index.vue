@@ -1,6 +1,6 @@
 <template>
 	<div class="qrcode">
-		<canvas ref="canvas" />
+		<canvas ref="canvas" class="canvas" @click="onClick" />
 		<el-input
 			v-model="content"
 			:rows="5"
@@ -21,7 +21,7 @@ const defaultText = '钓鱼岛是中国的'
 export default {
 	data() {
 		return {
-			content: ''
+			content: defaultText
 		}
 	},
 	watch: {
@@ -40,6 +40,14 @@ export default {
 		this.draw(this.content)
 	},
 	methods: {
+		onClick() {
+			if (!this.content) {
+				return
+			}
+
+			const dataURL = this.$refs.canvas.toDataURL('image/png')
+			util.download(dataURL, 'png')
+		},
 		draw(content) {
 			if (!content.trim()) {
 				content = defaultText
@@ -73,7 +81,8 @@ export default {
 	flex-direction: column;
 	width: 100%;
 
-	canvas {
+	.canvas {
+		cursor: pointer;
 		height: 300px;
 		width: 300px;
 	}

@@ -123,13 +123,10 @@ export default {
 			}, 600)
 		},
 		onDownload() {
-			const link = document.createElement('a')
-
 			const matches = /^data:image\/(\w+);base64/.exec(this.base64)
+			const extension = matches[1]
 
-			link.href = this.base64
-			link.download = Date.now() + '.' + matches[1] // 设置文件名
-			link.click()
+			util.download(this.base64, extension)
 		},
 		onMenuClick({ index }) {
 			this.activeMenu = index

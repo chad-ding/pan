@@ -1,4 +1,15 @@
 export default {
+	download(url, extension) {
+		const link = document.createElement('a')
+
+		link.href = url
+		link.download = Date.now() // 设置文件名
+		if (extension) {
+			link.download += `.${extension}`
+		}
+
+		link.click()
+	},
 	// 是否原始类型数据
 	isPrimitiveType(data) {
 		const type = typeof data
