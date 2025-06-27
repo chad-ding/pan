@@ -22,7 +22,7 @@ import util from '@/common/util'
 
 import Logo from '../../../icon/logo.256.png'
 
-const DefaultText = '©Chad.Ding All Rights Reserved'
+const DefaultText = '© Chad.Ding All Rights Reserved'
 
 export default {
 	data() {
@@ -82,8 +82,10 @@ export default {
 					}
 
 					const ctx = canvas.getContext('2d')
-					const img = new Image()
+					ctx.imageSmoothingEnabled = true
+					ctx.imageSmoothingQuality = 'high'
 
+					const img = new Image()
 					img.addEventListener('load', () => {
 						const logoW = canvas.width / 6
 						const logoH = (logoW * 128) / 200
@@ -100,7 +102,6 @@ export default {
 						const logoY = (canvas.height - logoH) / 2
 						ctx.drawImage(img, logoX, logoY, logoW, logoH)
 					})
-
 					img.src = Logo
 				}
 			)
