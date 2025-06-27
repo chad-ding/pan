@@ -20,7 +20,9 @@ import { ElMessage } from 'element-plus'
 
 import util from '@/common/util'
 
-const DefaultText = '人生就像巧克力，永远不知道下一颗会不会掺了狗屎'
+import Logo from '../../../icon/logo.256.png'
+
+const DefaultText = '©Chad.Ding All Rights Reserved'
 
 export default {
 	data() {
@@ -56,12 +58,16 @@ export default {
 			if (!content) {
 				return
 			}
+
+			const canvas = this.$refs.canvas
+
 			QRCode.toCanvas(
-				this.$refs.canvas,
+				canvas,
 				content,
 				{
 					width: 300,
 					height: 300,
+					errorCorrectionLevel: 'H',
 					color: {
 						dark: '#606266'
 					}
@@ -72,7 +78,30 @@ export default {
 							message: '绘制二维码失败: ' + err.message,
 							type: 'error'
 						})
+						return
 					}
+
+					const ctx = canvas.getContext('2d')
+					const img = new Image()
+
+					img.addEventListener('load', () => {
+						const logoW = canvas.width / 6
+						const logoH = (logoW * 128) / 200
+						const containerSize = logoW * 1.2
+
+						// 绘制框体
+						const containerX = (canvas.width - containerSize) / 2
+						const containerY = (canvas.height - containerSize) / 2
+						ctx.fillStyle = '#FFFFFF'
+						ctx.fillRect(containerX, containerY, containerSize, containerSize)
+
+						// 绘制Logo
+						const logoX = (canvas.width - logoW) / 2
+						const logoY = (canvas.height - logoH) / 2
+						ctx.drawImage(img, logoX, logoY, logoW, logoH)
+					})
+
+					img.src = Logo
 				}
 			)
 		}

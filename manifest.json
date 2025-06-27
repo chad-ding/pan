@@ -7,7 +7,7 @@
 	"action": {
 		"default_popup": "popup/index.html",
 		"default_icon": {
-			"128": "icon/pan.png"
+			"128": "icon/logo.128.png"
 		}
 	},
 	"content_security_policy": {
@@ -15,7 +15,8 @@
 		"sandbox": "sandbox allow-scripts; script-src 'self' 'unsafe-eval'; child-src 'self';"
 	},
 	"icons": {
-		"128": "icon/pan.png"
+		"128": "icon/logo.128.png",
+		"256": "icon/logo.256.png"
 	},
 	"background": {
 		"service_worker": "background/index.js"
