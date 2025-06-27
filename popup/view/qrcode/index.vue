@@ -123,13 +123,13 @@ export default {
 		width: 300px;
 
 		.canvas {
-			cursor: pointer;
-			height: 100%;
 			opacity: 0;
 			width: 100%;
 		}
 
 		&.fulfilled {
+			cursor: pointer;
+
 			.canvas {
 				opacity: 1;
 			}
