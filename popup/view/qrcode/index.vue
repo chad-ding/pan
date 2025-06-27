@@ -16,14 +16,16 @@
 
 <script>
 import QRCode from 'qrcode'
+import { ElMessage } from 'element-plus'
+
 import util from '@/common/util'
 
-const defaultText = '钓鱼岛是中国的'
+const DefaultText = '人生就像巧克力，永远不知道下一颗会不会掺了狗屎'
 
 export default {
 	data() {
 		return {
-			content: defaultText
+			content: DefaultText
 		}
 	},
 	watch: {
@@ -64,9 +66,12 @@ export default {
 						dark: '#606266'
 					}
 				},
-				function (error) {
-					if (error) {
-						console.error('绘制二维码失败')
+				err => {
+					if (err) {
+						ElMessage({
+							message: '绘制二维码失败: ' + err.message,
+							type: 'error'
+						})
 					}
 				}
 			)
