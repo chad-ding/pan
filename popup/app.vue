@@ -18,6 +18,7 @@ import Json from '@/view/json/index.vue'
 import Numeric from '@/view/numeric/index.vue'
 import Base64 from '@/view/base64/index.vue'
 import Cookies from '@/view/cookies/index.vue'
+import Http from '@/view/http/index.vue'
 
 const StorageKey = 'currentTabName'
 
@@ -31,6 +32,10 @@ export default {
 			cookies: {
 				label: 'Cookies',
 				component: Cookies
+			},
+			http: {
+				label: '数据请求',
+				component: Http
 			},
 			codec: {
 				label: '字符串编/解码',
@@ -56,7 +61,7 @@ export default {
 
 		return {
 			tabs,
-			currenTab: 'qrcode'
+			currenTab: 'http'
 		}
 	},
 	created() {

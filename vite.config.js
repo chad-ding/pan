@@ -1,5 +1,4 @@
 import path from 'path'
-import ip from 'ip'
 import { defineConfig } from 'vite'
 import dateFormat from 'date-format'
 import Vue from '@vitejs/plugin-vue'
@@ -14,7 +13,7 @@ export default defineConfig(({ mode }) => {
 	return {
 		base: './',
 		server: {
-			host: ip.address(),
+			host: '0.0.0.0',
 			port: 8081,
 			disableHostCheck: true
 		},
