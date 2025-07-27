@@ -1,0 +1,222 @@
+[
+    {
+        "id": 1703123456789,
+        "name": "本地开发CORS支持",
+        "urlPattern": "http://localhost:3000/*",
+        "modifyType": "responseHeader",
+        "operation": "set",
+        "target": "Access-Control-Allow-Origin",
+        "value": "*",
+        "priority": 10,
+        "active": true
+    },
+    {
+        "id": 1703123456790,
+        "name": "自定义User-Agent",
+        "urlPattern": "*://httpbin.org/*",
+        "modifyType": "requestHeader",
+        "operation": "set",
+        "target": "User-Agent",
+        "value": "Custom-Browser/1.0 (HTTP-Modifier)",
+        "priority": 5,
+        "active": true
+    },
+    {
+        "id": 1703123456791,
+        "name": "API认证头",
+        "urlPattern": "https://api.example.com/*",
+        "modifyType": "requestHeader",
+        "operation": "set",
+        "target": "Authorization",
+        "value": "Bearer your-api-token-here",
+        "priority": 20,
+        "active": true
+    },
+    {
+        "id": 1703123456792,
+        "name": "安全响应头",
+        "urlPattern": "https://mywebsite.com/*",
+        "modifyType": "responseHeader",
+        "operation": "set",
+        "target": "X-Frame-Options",
+        "value": "DENY",
+        "priority": 15,
+        "active": true
+    },
+    {
+        "id": 1703123456793,
+        "name": "内容类型保护",
+        "urlPattern": "https://mywebsite.com/*",
+        "modifyType": "responseHeader",
+        "operation": "set",
+        "target": "X-Content-Type-Options",
+        "value": "nosniff",
+        "priority": 15,
+        "active": true
+    },
+    {
+        "id": 1703123456794,
+        "name": "XSS保护",
+        "urlPattern": "https://mywebsite.com/*",
+        "modifyType": "responseHeader",
+        "operation": "set",
+        "target": "X-XSS-Protection",
+        "value": "1; mode=block",
+        "priority": 15,
+        "active": true
+    },
+    {
+        "id": 1703123456795,
+        "name": "API版本重定向",
+        "urlPattern": "https://api.example.com/v1/*",
+        "modifyType": "requestUrl",
+        "operation": "redirect",
+        "target": "",
+        "value": "https://api.example.com/v2/*",
+        "priority": 25,
+        "active": true
+    },
+    {
+        "id": 1703123456796,
+        "name": "旧域名重定向",
+        "urlPattern": "https://old.example.com/*",
+        "modifyType": "requestUrl",
+        "operation": "redirect",
+        "target": "",
+        "value": "https://new.example.com/*",
+        "priority": 30,
+        "active": true
+    },
+    {
+        "id": 1703123456797,
+        "name": "删除缓存头",
+        "urlPattern": "http://localhost:8080/*",
+        "modifyType": "responseHeader",
+        "operation": "remove",
+        "target": "Cache-Control",
+        "value": "",
+        "priority": 8,
+        "active": true
+    },
+    {
+        "id": 1703123456798,
+        "name": "删除ETag",
+        "urlPattern": "http://localhost:8080/*",
+        "modifyType": "responseHeader",
+        "operation": "remove",
+        "target": "ETag",
+        "value": "",
+        "priority": 8,
+        "active": true
+    },
+    {
+        "id": 1703123456799,
+        "name": "调试模式标识",
+        "urlPattern": "http://localhost:*/*",
+        "modifyType": "responseHeader",
+        "operation": "set",
+        "target": "X-Debug-Mode",
+        "value": "enabled",
+        "priority": 3,
+        "active": true
+    },
+    {
+        "id": 1703123456800,
+        "name": "服务器信息",
+        "urlPattern": "http://localhost:*/*",
+        "modifyType": "responseHeader",
+        "operation": "set",
+        "target": "X-Server-Info",
+        "value": "development-server",
+        "priority": 3,
+        "active": true
+    },
+    {
+        "id": 1703123456801,
+        "name": "CDN缓存优化",
+        "urlPattern": "https://cdn.example.com/*",
+        "modifyType": "responseHeader",
+        "operation": "set",
+        "target": "Cache-Control",
+        "value": "public, max-age=31536000, immutable",
+        "priority": 12,
+        "active": true
+    },
+    {
+        "id": 1703123456802,
+        "name": "移动端优化",
+        "urlPattern": "https://m.example.com/*",
+        "modifyType": "responseHeader",
+        "operation": "set",
+        "target": "Cache-Control",
+        "value": "public, max-age=3600",
+        "priority": 10,
+        "active": true
+    },
+    {
+        "id": 1703123456803,
+        "name": "测试环境标识",
+        "urlPattern": "https://test.example.com/*",
+        "modifyType": "responseHeader",
+        "operation": "set",
+        "target": "X-Environment",
+        "value": "testing",
+        "priority": 5,
+        "active": true
+    },
+    {
+        "id": 1703123456804,
+        "name": "API版本头",
+        "urlPattern": "https://api.example.com/v2/*",
+        "modifyType": "responseHeader",
+        "operation": "set",
+        "target": "X-API-Version",
+        "value": "v2.0.0",
+        "priority": 7,
+        "active": true
+    },
+    {
+        "id": 1703123456805,
+        "name": "内容类型强制",
+        "urlPattern": "https://api.example.com/*.json",
+        "modifyType": "responseHeader",
+        "operation": "set",
+        "target": "Content-Type",
+        "value": "application/json; charset=utf-8",
+        "priority": 18,
+        "active": true
+    },
+    {
+        "id": 1703123456806,
+        "name": "压缩头设置",
+        "urlPattern": "https://cdn.example.com/*.js",
+        "modifyType": "responseHeader",
+        "operation": "set",
+        "target": "Content-Encoding",
+        "value": "gzip",
+        "priority": 12,
+        "active": true
+    },
+    {
+        "id": 1703123456807,
+        "name": "HSTS安全头",
+        "urlPattern": "https://secure.example.com/*",
+        "modifyType": "responseHeader",
+        "operation": "set",
+        "target": "Strict-Transport-Security",
+        "value": "max-age=31536000; includeSubDomains",
+        "priority": 25,
+        "active": true
+    },
+    {
+        "id": 1703123456808,
+        "name": "CSP安全策略",
+        "urlPattern": "https://secure.example.com/*",
+        "modifyType": "responseHeader",
+        "operation": "set",
+        "target": "Content-Security-Policy",
+        "value": "default-src 'self'; script-src 'self' 'unsafe-inline'",
+        "priority": 25,
+        "active": true
+    }
+]

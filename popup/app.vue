@@ -34,7 +34,7 @@ export default {
 				component: Cookies
 			},
 			http: {
-				label: '数据请求',
+				label: 'Http',
 				component: Http
 			},
 			codec: {

@@ -16,5 +16,11 @@
 	"eslint.nodePath": "",
 	"eslint.options": {
 		"configFile": ""
+	},
+	"[json]": {
+		"editor.defaultFormatter": "vscode.json-language-features"
+	},
+	"[vue]": {
+		"editor.defaultFormatter": "Vue.volar"
 	}
 }

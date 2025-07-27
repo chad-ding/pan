@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>HTTP修改器测试页面</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				max-width: 1000px;
+				margin: 0 auto;
+				padding: 20px;
+			}
+			.test-section {
+				margin: 20px 0;
+				padding: 15px;
+				border: 1px solid #ddd;
+				border-radius: 5px;
+			}
+			.test-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+				gap: 20px;
+				margin-top: 20px;
+			}
+			button {
+				background: #007bff;
+				color: white;
+				border: none;
+				padding: 10px 20px;
+				border-radius: 5px;
+				cursor: pointer;
+				margin: 5px;
+			}
+			button:hover {
+				background: #0056b3;
+			}
+			.result {
+				margin-top: 10px;
+				padding: 10px;
+				background: #f8f9fa;
+				border-radius: 3px;
+				white-space: pre-wrap;
+				max-height: 300px;
+				overflow-y: auto;
+			}
+			.status {
+				padding: 5px 10px;
+				border-radius: 3px;
+				margin: 5px 0;
+			}
+			.status.success {
+				background: #d4edda;
+				color: #155724;
+			}
+			.status.error {
+				background: #f8d7da;
+				color: #721c24;
+			}
+			.status.info {
+				background: #d1ecf1;
+				color: #0c5460;
+			}
+			.example-rule {
+				background: #f8f9fa;
+				padding: 10px;
+				border-radius: 5px;
+				margin: 10px 0;
+				border-left: 4px solid #007bff;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>HTTP修改器测试页面</h1>
+
+		<div class="test-section">
+			<h3>功能说明</h3>
+			<p>这个页面用于测试浏览器扩展的HTTP修改功能，包括请求头、响应头和请求地址的修改。</p>
+			<div class="status info">
+				<strong>使用步骤：</strong>
+				<ol>
+					<li>打开浏览器扩展的"HTTP修改器"模块</li>
+					<li>添加相应的修改规则</li>
+					<li>点击下面的测试按钮验证效果</li>
+				</ol>
+			</div>
+		</div>
+
+		<div class="test-section">
+			<h3>规则示例</h3>
+			<div class="example-rule">
+				<strong>请求头修改示例：</strong><br />
+				规则名称: 修改User-Agent<br />
+				URL匹配: *://httpbin.org/*<br />
+				修改类型: 请求头<br />
+				目标: User-Agent<br />
+				值: Custom-User-Agent/1.0
+			</div>
+			<div class="example-rule">
+				<strong>响应头修改示例：</strong><br />
+				规则名称: 添加CORS头<br />
+				URL匹配: *://httpbin.org/*<br />
+				修改类型: 响应头<br />
+				目标: Access-Control-Allow-Origin<br />
+				值: *
+			</div>
+			<div class="example-rule">
+				<strong>请求地址重定向示例：</strong><br />
+				规则名称: API重定向<br />
+				URL匹配: https://api.example.com/v1/*<br />
+				修改类型: 请求地址<br />
+				目标: (留空)<br />
+				值: https://api.example.com/v2/*
+			</div>
+		</div>
+
+		<div class="test-grid">
+			<div class="test-section">
+				<h3>请求头测试</h3>
+				<p>测试请求头的修改功能：</p>
+				<button onclick="testRequestHeaders()">测试请求头</button>
+				<button onclick="testCustomUserAgent()">测试User-Agent</button>
+				<button onclick="testContentType()">测试Content-Type</button>
+				<div id="requestHeadersResult" class="result"></div>
+			</div>
+
+			<div class="test-section">
+				<h3>响应头测试</h3>
+				<p>测试响应头的修改功能：</p>
+				<button onclick="testResponseHeaders()">测试响应头</button>
+				<button onclick="testCORSHeaders()">测试CORS头</button>
+				<button onclick="testSecurityHeaders()">测试安全头</button>
+				<div id="responseHeadersResult" class="result"></div>
+			</div>
+
+			<div class="test-section">
+				<h3>请求地址测试</h3>
+				<p>测试请求地址的重定向功能：</p>
+				<button onclick="testUrlRedirect()">测试URL重定向</button>
+				<button onclick="testApiVersion()">测试API版本</button>
+				<button onclick="testDomainRedirect()">测试域名重定向</button>
+				<div id="urlRedirectResult" class="result"></div>
+			</div>
+
+			<div class="test-section">
+				<h3>综合测试</h3>
+				<p>测试多种修改的组合效果：</p>
+				<button onclick="testCombined()">综合测试</button>
+				<button onclick="testPerformance()">性能测试</button>
+				<button onclick="clearResults()">清空结果</button>
+				<div id="combinedResult" class="result"></div>
+			</div>
+		</div>
+
+		<script>
+			function showResult(elementId, data) {
+				const element = document.getElementById(elementId)
+				element.textContent = JSON.stringify(data, null, 2)
+			}
+
+			function showStatus(message, type = 'info') {
+				const statusDiv = document.createElement('div')
+				statusDiv.className = `status ${type}`
+				statusDiv.textContent = message
+				document.body.insertBefore(statusDiv, document.body.firstChild)
+
+				setTimeout(() => {
+					statusDiv.remove()
+				}, 5000)
+			}
+
+			async function testRequestHeaders() {
+				try {
+					const response = await fetch('https://httpbin.org/headers')
+					const data = await response.json()
+					showResult('requestHeadersResult', {
+						message: '请求头测试结果',
+						originalHeaders: data.headers,
+						note: '检查User-Agent、Content-Type等请求头是否被修改'
+					})
+				} catch (error) {
+					showResult('requestHeadersResult', { error: error.message })
+				}
+			}
+
+			async function testCustomUserAgent() {
+				try {
+					const response = await fetch('https://httpbin.org/user-agent')
+					const data = await response.json()
+					showResult('requestHeadersResult', {
+						message: 'User-Agent测试结果',
+						userAgent: data['user-agent'],
+						note: '如果设置了自定义User-Agent规则，这里应该显示修改后的值'
+					})
+				} catch (error) {
+					showResult('requestHeadersResult', { error: error.message })
+				}
+			}
+
+			async function testContentType() {
+				try {
+					const response = await fetch('https://httpbin.org/post', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({ test: 'data' })
+					})
+					const data = await response.json()
+					showResult('requestHeadersResult', {
+						message: 'Content-Type测试结果',
+						headers: data.headers,
+						note: '检查Content-Type是否被修改'
+					})
+				} catch (error) {
+					showResult('requestHeadersResult', { error: error.message })
+				}
+			}
+
+			async function testResponseHeaders() {
+				try {
+					const response = await fetch('https://httpbin.org/headers')
+					const headers = {}
+					response.headers.forEach((value, key) => {
+						headers[key] = value
+					})
+					showResult('responseHeadersResult', {
+						message: '响应头测试结果',
+						headers: headers,
+						note: '检查响应头是否被修改（如CORS头、安全头等）'
+					})
+				} catch (error) {
+					showResult('responseHeadersResult', { error: error.message })
+				}
+			}
+
+			async function testCORSHeaders() {
+				try {
+					const response = await fetch('https://httpbin.org/headers')
+					const corsHeaders = {
+						'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
+						'Access-Control-Allow-Methods': response.headers.get('Access-Control-Allow-Methods'),
+						'Access-Control-Allow-Headers': response.headers.get('Access-Control-Allow-Headers')
+					}
+					showResult('responseHeadersResult', {
+						message: 'CORS响应头测试',
+						corsHeaders: corsHeaders,
+						note: '如果设置了CORS规则，这些头应该被修改'
+					})
+				} catch (error) {
+					showResult('responseHeadersResult', { error: error.message })
+				}
+			}
+
+			async function testSecurityHeaders() {
+				try {
+					const response = await fetch('https://httpbin.org/headers')
+					const securityHeaders = {
+						'X-Frame-Options': response.headers.get('X-Frame-Options'),
+						'X-Content-Type-Options': response.headers.get('X-Content-Type-Options'),
+						'X-XSS-Protection': response.headers.get('X-XSS-Protection'),
+						'Strict-Transport-Security': response.headers.get('Strict-Transport-Security')
+					}
+					showResult('responseHeadersResult', {
+						message: '安全响应头测试',
+						securityHeaders: securityHeaders,
+						note: '检查安全相关的响应头是否被添加或修改'
+					})
+				} catch (error) {
+					showResult('responseHeadersResult', { error: error.message })
+				}
+			}
+
+			async function testUrlRedirect() {
+				try {
+					// 测试一个可能被重定向的URL
+					const response = await fetch('https://httpbin.org/redirect/1')
+					showResult('urlRedirectResult', {
+						message: 'URL重定向测试',
+						status: response.status,
+						url: response.url,
+						note: '如果设置了重定向规则，请求应该被重定向到新地址'
+					})
+				} catch (error) {
+					showResult('urlRedirectResult', { error: error.message })
+				}
+			}
+
+			async function testApiVersion() {
+				try {
+					// 模拟API版本重定向
+					const response = await fetch('https://httpbin.org/json')
+					showResult('urlRedirectResult', {
+						message: 'API版本重定向测试',
+						status: response.status,
+						url: response.url,
+						note: '如果设置了API版本重定向规则，v1的请求应该重定向到v2'
+					})
+				} catch (error) {
+					showResult('urlRedirectResult', { error: error.message })
+				}
+			}
+
+			async function testDomainRedirect() {
+				try {
+					// 测试域名重定向
+					const response = await fetch('https://httpbin.org/status/200')
+					showResult('urlRedirectResult', {
+						message: '域名重定向测试',
+						status: response.status,
+						url: response.url,
+						note: '如果设置了域名重定向规则，请求应该被重定向到新域名'
+					})
+				} catch (error) {
+					showResult('urlRedirectResult', { error: error.message })
+				}
+			}
+
+			async function testCombined() {
+				try {
+					const startTime = performance.now()
+
+					// 同时测试请求头和响应头
+					const response = await fetch('https://httpbin.org/headers', {
+						headers: {
+							'X-Test-Header': 'test-value'
+						}
+					})
+
+					const data = await response.json()
+					const endTime = performance.now()
+
+					showResult('combinedResult', {
+						message: '综合测试结果',
+						requestHeaders: data.headers,
+						responseHeaders: Object.fromEntries(response.headers.entries()),
+						performance: `${(endTime - startTime).toFixed(2)}ms`,
+						note: '检查请求头和响应头是否都被正确修改'
+					})
+				} catch (error) {
+					showResult('combinedResult', { error: error.message })
+				}
+			}
+
+			async function testPerformance() {
+				try {
+					const iterations = 10
+					const times = []
+
+					for (let i = 0; i < iterations; i++) {
+						const startTime = performance.now()
+						await fetch('https://httpbin.org/headers')
+						const endTime = performance.now()
+						times.push(endTime - startTime)
+					}
+
+					const avgTime = times.reduce((a, b) => a + b, 0) / times.length
+					const minTime = Math.min(...times)
+					const maxTime = Math.max(...times)
+
+					showResult('combinedResult', {
+						message: '性能测试结果',
+						iterations: iterations,
+						averageTime: `${avgTime.toFixed(2)}ms`,
+						minTime: `${minTime.toFixed(2)}ms`,
+						maxTime: `${maxTime.toFixed(2)}ms`,
+						allTimes: times.map(t => t.toFixed(2)),
+						note: '测试HTTP修改规则对性能的影响'
+					})
+				} catch (error) {
+					showResult('combinedResult', { error: error.message })
+				}
+			}
+
+			function clearResults() {
+				const resultElements = [
+					'requestHeadersResult',
+					'responseHeadersResult',
+					'urlRedirectResult',
+					'combinedResult'
+				]
+
+				resultElements.forEach(id => {
+					const element = document.getElementById(id)
+					if (element) {
+						element.textContent = ''
+					}
+				})
+
+				showStatus('所有测试结果已清空', 'success')
+			}
+
+			// 页面加载时显示使用说明
+			window.addEventListener('load', () => {
+				showStatus('页面加载完成，请使用浏览器扩展的HTTP修改器功能来测试', 'info')
+			})
+		</script>
+	</body>
+</html>
