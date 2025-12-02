@@ -13,33 +13,23 @@ fse.ensureDirSync(dist)
 
 const watching = process.argv[2] === '--watch'
 
-fs.writeFile(
-	path.resolve(dist, './manifest.json'),
-	JSON.stringify(manifest, null, 4),
-	{ encoding: 'utf-8' },
-	err => {
-		if (err) {
-			console.log(chalk.red('写入manifest失败'))
-			console.log(chalk.red(err))
-		} else {
-			console.log(chalk.green('写入manifest成功'))
-		}
+fs.writeFile(path.resolve(dist, './manifest.json'), JSON.stringify(manifest, null, 4), { encoding: 'utf-8' }, err => {
+	if (err) {
+		console.log(chalk.red('写入manifest失败'))
+		console.log(chalk.red(err))
+	} else {
+		console.log(chalk.green('写入manifest成功'))
 	}
-)
+})
 
-fs.cp(
-	path.resolve(__dirname, '../icon'),
-	path.resolve(dist, './icon'),
-	{ recursive: true },
-	err => {
-		if (err) {
-			console.log(chalk.red('复制icon失败'))
-			console.log(chalk.red(err))
-		} else {
-			console.log(chalk.green('复制icon成功'))
-		}
+fs.cp(path.resolve(__dirname, '../icon'), path.resolve(dist, './icon'), { recursive: true }, err => {
+	if (err) {
+		console.log(chalk.red('复制icon失败'))
+		console.log(chalk.red(err))
+	} else {
+		console.log(chalk.green('复制icon成功'))
 	}
-)
+})
 
 let command = 'rollup -c rollup.config.js'
 if (watching) {

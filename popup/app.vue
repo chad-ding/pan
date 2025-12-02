@@ -61,7 +61,7 @@ export default {
 
 		return {
 			tabs,
-			currenTab: 'http'
+			currenTab: 'qrcode'
 		}
 	},
 	created() {
