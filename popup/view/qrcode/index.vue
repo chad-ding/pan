@@ -137,12 +137,9 @@ export default {
 
 		&:not(.fulfilled)::before {
 			background: url('@/image/empty.png') center / 120px auto no-repeat;
-			bottom: 0;
 			content: '';
-			left: 0;
+			inset: 0;
 			position: absolute;
-			right: 0;
-			top: 0;
 		}
 	}
 

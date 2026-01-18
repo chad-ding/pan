@@ -1,26 +1,29 @@
 {
+	"[vue]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"less.validate": false,
+	"[less]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"eslint.validate": [
+		"javascript",
+		"typescript"
+	],
+	"stylelint.validate": ["css", "scss", "vue", "less", "postcss"],
 	"files.eol": "\n",
 	"files.insertFinalNewline": true,
 	"editor.formatOnSave": true,
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": "explicit",
-		"source.fixAll.stylelint": "explicit"
+		"source.fixAll": "explicit"
 	},
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"prettier.configPath": "",
-	"prettier.disableLanguages": ["javascript", "javascriptreact", "css", "less", "vue"],
 	"javascript.format.enable": false,
-	"css.validate": false,
-	"less.validate": false,
 	"vetur.format.enable": false,
-	"eslint.nodePath": "",
-	"eslint.options": {
-		"configFile": ""
-	},
-	"[json]": {
-		"editor.defaultFormatter": "vscode.json-language-features"
-	},
-	"[vue]": {
-		"editor.defaultFormatter": "Vue.volar"
-	}
+	"editor.formatOnPaste": true,
+	"editor.formatOnType": true,
+	"prettier.useTabs": true
 }

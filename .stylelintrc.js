@@ -1,12 +1,26 @@
 module.exports = {
 	extends: [
+		'stylelint-config-recommended-less',
+		'stylelint-config-html/vue',
 		'stylelint-config-standard',
-		'stylelint-config-css-modules',
-		'stylelint-prettier/recommended'
+		'stylelint-config-recess-order'
 	],
-	plugins: ['stylelint-order'],
+	plugins: ['stylelint-less'],
 	rules: {
-		'selector-pseudo-class-no-unknown': null,
+		// Less 语法检查规则
+		'color-function-notation': 'modern',
+		'less/color-no-invalid-hex': true,
+		'less/color-hex-case': 'lower',
+		'value-keyword-case': null,
+		// 处理 Tailwind CSS 的 at-rule
+		'at-rule-no-unknown': [
+			true,
+			{
+				ignoreAtRules: ['apply', 'layer', 'responsive', 'screen', 'tailwind', 'variants']
+			}
+		],
+		'declaration-block-trailing-semicolon': null,
+		'no-descending-specificity': null,
 		// 不支持浏览器前缀，自行使用autoprefixer添加
 		'at-rule-no-vendor-prefix': true,
 		'media-feature-name-no-vendor-prefix': true,
@@ -25,7 +39,7 @@ module.exports = {
 		'max-nesting-depth': [
 			5,
 			{
-				ignoreAtRules: ['media']
+				ignoreAtRules: ['media', 'each', 'supports', 'include']
 			}
 		],
 		// 匹配规则中不限制选择器的个数
@@ -47,11 +61,11 @@ module.exports = {
 			}
 		],
 		// 禁止未知的伪元素
-		'selector-pseudo-element-no-unknown': [
+		'selector-pseudo-element-no-unknown': [true],
+		'selector-pseudo-class-no-unknown': [
 			true,
 			{
-				// 兼容vue深度作用选择器
-				ignorePseudoElements: ['v-deep']
+				ignorePseudoClasses: ['/^deep/']
 			}
 		],
 		// 禁止颜色名称
@@ -61,10 +75,17 @@ module.exports = {
 		// 能简写的属性尽量简写，禁止冗余的值
 		'shorthand-property-no-redundant-values': true,
 		// 规则集大括号里的内容排序方式
-		'order/order': [
-			['custom-properties', 'at-variables', 'less-mixins', 'declarations', 'rules']
-		],
-		// 声明按属性按字母排序
+		'order/properties-order': null,
 		'order/properties-alphabetical-order': true
-	}
+	},
+	overrides: [
+		{
+			files: ['**/*.vue'],
+			customSyntax: 'postcss-html'
+		},
+		{
+			files: ['**/*.less'],
+			customSyntax: 'postcss-less'
+		}
+	]
 }

@@ -416,7 +416,7 @@ export default {
 
 		.btn {
 			align-items: center;
-			color: rgb(121, 187, 255);
+			color: rgb(121 187 255);
 			display: inline-flex;
 			flex-direction: row;
 			font-size: 14px;

@@ -94,5 +94,5 @@ export default {
 </style>
 
 <style>
-@import '../../../node_modules/jsoneditor/dist/jsoneditor.css';
+@import url('../../../node_modules/jsoneditor/dist/jsoneditor.css');
 </style>

@@ -228,7 +228,7 @@ export default {
 }
 
 .note {
-	color: rgb(245, 108, 108);
+	color: rgb(245 108 108);
 	font-size: 12px;
 	font-weight: bold;
 	margin-left: 12px;
